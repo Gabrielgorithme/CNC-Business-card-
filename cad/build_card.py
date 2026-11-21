@@ -15,7 +15,7 @@ from matplotlib.textpath import TextPath
 from matplotlib.font_manager import FontProperties
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "design" / "v2"))
+sys.path.insert(0, str(ROOT / "design" / "v3"))
 import generate as G
 
 STOCK_T, SKIM_PER_SIDE = 2.00, 0.15    # raw plate, and what is faced off each side before engraving

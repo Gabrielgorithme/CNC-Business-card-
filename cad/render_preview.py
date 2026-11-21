@@ -2,7 +2,7 @@
 Colour is tinted by depth below the nearest face so shallow engraving stays readable."""
 import pyvista as pv, numpy as np, pathlib
 from matplotlib.colors import LinearSegmentedColormap
-out = pathlib.Path(__file__).parent.parent / "design" / "v2" / "3d"
+out = pathlib.Path(__file__).parent.parent / "design" / "v3" / "3d"
 m = pv.read(str(pathlib.Path(__file__).parent / "card_v3_engraved.stl"))
 z = m.points[:, 2]
 m["depth"] = np.clip(np.minimum(z, z.max() - z), 0, 0.3)

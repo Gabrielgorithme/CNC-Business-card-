@@ -1,4 +1,4 @@
-"""Concept v2: ripple face (recto) + dense technical face (verso).
+"""Card v3: ripple face (recto) + dense technical face (verso), ISOCP single-line lettering.
 10 SVG units = 1 mm. The ripple is a real height field (mm), shaded with numpy; the same
 function can later be exported as the 3D-contouring surface for CAM."""
 import math, base64, io, pathlib, sys
@@ -232,4 +232,4 @@ def back():
     return card(shade(None, seed=7), "\n".join(b))
 
 if __name__ == "__main__":
-    (OUT / "v2_front.svg").write_text(front()); (OUT / "v2_back.svg").write_text(back())
+    (OUT / "v3_front.svg").write_text(front()); (OUT / "v3_back.svg").write_text(back())

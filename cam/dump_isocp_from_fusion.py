@@ -1,5 +1,5 @@
 """Run inside Fusion (script or MCP): reads how Fusion draws Isocp.shx and writes the strokes to JSON.
-design/v2/lettering.py needs that file (isocp_fusion_strokes.json, next to it). It is not committed because
+design/v3/lettering.py needs that file (isocp_fusion_strokes.json, next to it). It is not committed because
 the glyph data comes from Autodesk's font."""
 import adsk.core, adsk.fusion, json, os
 
