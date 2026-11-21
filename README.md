@@ -73,6 +73,24 @@ Z stack and clearances:
 - The ripple is a revolved spline about the spring axis. Its tightest concave radius is 1.69 mm, so any ball nose up to R1.5 follows it.
 - With a 90° engraving tool, groove width = 2 × depth. Fully V-carving the widest engraved feature (a 0.68 mm QR module) goes 0.34 mm deep, which still leaves more than 1.2 mm anywhere outside the pocket.
 
+## CAM (Fusion, project "Business card", document "Card v2")
+
+`cad/export_cam_inputs.py` writes what Fusion needs: `card_v2_body.step` and the engraving contours in model coordinates (`engraving_verso_model.dxf`, `engraving_recto_model.dxf`). The comparator patches are left out of the verso contours; they are surfaced with ball mills.
+
+Setup "OP1 - Verso": verso up, WCS at the stock top centre (= card centre), X along the long edge, stock 105.6 x 73.98 x 2 (10 mm margin).
+
+| Operation | Tool | Depth | Time |
+|---|---|---|---|
+| Spring recess, 2D pocket | T20, 2 mm flat | 0.80 in two passes | 73 s |
+| Hole, helical bore to diameter 3 | T20 | through, 0.08 below the stock | 2 s |
+| Engraving, V-carve | T43, 90 degree | 0.05 to 1.05 (deepest in the QR finder squares) | 25 min |
+
+`cad/verify_nc.py` replays the posted G-code against the design: the V never leaves the artwork (overcut under 0.01 mm), the pocket tool stays between r 5.8 and 12.0, and no rapid moves in XY below Z0.
+
+Not programmed yet: comparator patches, outline and chamfer, reaming the hole to H7, the whole recto side.
+
+Note: the ripple field sits 0.02 mm below the raw recto face so the crests are machined too.
+
 ## Earlier concepts (v1)
 
 Three first directions are kept in `design/mockups/`: A drawing sheet, B ripple, C digital thread.

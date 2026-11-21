@@ -26,6 +26,7 @@ POCKET_DEPTH = (T - WEB) / 2           # 0.80 from each face
 SLOT_W = 1.0
 HOLE = (L - 5.0, Wd - 5.0, 3.0)        # x, y, diameter (5 mm from datums B/C seen from verso)
 ENGRAVE_VERSO, ENGRAVE_RECTO = 0.10, 0.15
+SKIM = 0.02                            # the ripple field sits this far below the raw face, so crests are machined too
 BAND_Y = Wd - G.BAND_Y
 SY = Wd / 54.0                         # mockup is drawn 54.0 high
 FD = "/usr/share/fonts/truetype/dejavu/"
@@ -91,19 +92,20 @@ def path_shape(el, stroke, fill):
             out.append(LineString(pts).buffer(w / 2, cap_style=2, join_style=2))
     return unary_union(out) if out else None
 
-def engraving(svg_text, mirror):
+def engraving(svg_text, mirror, colours=None):
     """Union of everything engraved on one face, in card-frame mm."""
     import io
+    colours = colours or ENGRAVE_COLOURS
     doc = se.SVG.parse(io.StringIO(svg_text), reify=False)
     shapes = []
     for el in doc.elements():
         if isinstance(el, (se.SVG, se.Group, se.Image, se.ClipPath)) or not hasattr(el, "values"): continue
         v = el.values
         if v.get("clip-path") is None and v.get("filter"): continue
-        stroke = v.get("stroke") in ENGRAVE_COLOURS
-        fill = v.get("fill") in ENGRAVE_COLOURS
+        stroke = v.get("stroke") in colours
+        fill = v.get("fill") in colours
         if isinstance(el, se.Text):
-            if v.get("fill") in ENGRAVE_COLOURS: shapes.append(text_shape(el))
+            if v.get("fill") in colours: shapes.append(text_shape(el))
         elif isinstance(el, se.Shape) and (stroke or fill):
             s = path_shape(el, stroke, fill)
             if s is not None: shapes.append(s)
@@ -134,13 +136,13 @@ def cut_all(body, solids, chunk=150):
     return body
 
 # ---------------------------------------------------------------- build
-def build():
+def build(engrave=True):
     card = (cq.Workplane("XY").box(L, Wd, T, centered=False).edges("|Z").fillet(R_CORNER)
             .faces("+Z or -Z").edges().chamfer(CHAMFER)).val()
 
     # ripple: the height field only depends on the distance to the spring centre -> a revolve
     r = np.arange(14.2, 71.0, 0.1)
-    h = -G.AMP * (0.5 - 0.5 * np.cos(2 * np.pi * r / G.LAMBDA)) * np.clip((r - 14.2) / 1.5, 0, 1) * np.exp(-r / 60.0)
+    h = -SKIM - G.AMP * (0.5 - 0.5 * np.cos(2 * np.pi * r / G.LAMBDA)) * np.clip((r - 14.2) / 1.5, 0, 1) * np.exp(-r / 60.0)
     pts = [(float(a), float(T + b)) for a, b in zip(r, h)]
     prof = (cq.Workplane("XZ").moveTo(*pts[0]).spline(pts[1:], includeCurrent=True)
             .lineTo(pts[-1][0], T + 1).lineTo(pts[0][0], T + 1).close())
@@ -170,6 +172,7 @@ def build():
     verso = engraving(G.back(), mirror=True).difference(keep_out).intersection(outline)
     print("recto engraving area %.1f mm2, verso %.1f mm2" % (recto.area, verso.area))
     body = card
+    if not engrave: return body, None, recto, verso
     card = cut_all(card, to_solids(recto, T - ENGRAVE_RECTO, T + 0.5))
     card = cut_all(card, to_solids(verso, -0.5, ENGRAVE_VERSO))
     return body, card, recto, verso
