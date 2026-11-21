@@ -3,6 +3,7 @@
 function can later be exported as the 3D-contouring surface for CAM."""
 import math, base64, io, pathlib, sys
 import numpy as np, segno
+import lettering as LT
 from PIL import Image
 OUT = pathlib.Path(__file__).parent
 W, H, R = 856, 540, 32
@@ -41,8 +42,15 @@ def shade(height_fn, px_per_mm=20, seed=1):
     buf = io.BytesIO(); img.save(buf, "PNG", optimize=True)
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
-def T(x, y, s, size, weight=500, anchor="start", fill=ENG, ls=1.2, font=SANS, extra=""):
-    return f'<text x="{x}" y="{y}" {font} font-size="{size}" font-weight="{weight}" text-anchor="{anchor}" fill="{fill}" letter-spacing="{ls}" {extra}>{s}</text>'
+def T(x, y, s, size, weight=500, anchor="start", fill=ENG, ls=1.2, font=None, extra=""):
+    """Single-line ISOCP text. `size` is the old font size in units (0.1 mm); the capital height it gave is kept,
+    with Fusion's text height never below lettering.MIN_HEIGHT."""
+    h = max(LT.MIN_HEIGHT, 0.729 * size / 10 / LT.CAP_RATIO)             # Fusion text height [mm]
+    lines, width = LT.layout(s, h, ls * 0.035 * h / 0.7)
+    dx = {"start": 0, "middle": -width / 2, "end": -width}[anchor]
+    d = " ".join("M" + " L".join("%.2f,%.2f" % (x + (px + dx) * 10, y - py * 10) for px, py in ln) for ln in lines)
+    sw = 20 * LT.depth_for(h * LT.CAP_RATIO)
+    return f'<path d="{d}" fill="none" stroke="{fill}" stroke-width="{sw:g}" stroke-linecap="round" stroke-linejoin="round" {extra}/>'
 def P(d, w=1.3, stroke=ENG, fill="none", extra=""):
     return f'<path d="{d}" stroke="{stroke}" stroke-width="{w}" fill="{fill}" {extra}/>'
 
@@ -177,12 +185,12 @@ def back():
     b.append(P(f"M{rx},{ry-12} l7,12 l14,-24 h44 M{rx},{ry-12} h14", 1.4)); b.append(T(rx+24, ry-2, "Ra 0.8", 12, 600, ls=.6))
     # --- G-code excerpt
     gx, gy = 420, 140
-    for i, ln in enumerate(["%", "O2027 (GG CARD OP2)", "G21 G90 G17 G54", "T405 M6 (D1 2FL)", "S24000 M3", "G0 X26.6 Y15.8", "G1 Z-1.25 F120", "G3 X38.4 Y22. I-6.1", "   J9.4 F480", "(… 2 847 BLOCKS)"]):
+    for i, ln in enumerate(["%", "O2027 (GG CARD OP2)", "G21 G90 G17 G54", "T405 M6 (D1 2FL)", "S24000 M3", "G0 X26.6 Y15.8", "G1 Z-1.25 F120", "G3 X38.4 Y22. I-6.1", "   J9.4 F480", "(... 2847 BLOCKS)"]):
         b.append(T(gx, gy + i*12.6, ln, 9.2, 500, fill=ENG if i else ENG2, ls=0, font=MONO))
     # --- QR
     qx, qy, qs = 594, 50, 222
     b.append(qr(qx, qy, qs))
-    b.append(T(qx-9, qy+qs+30, "SCAN — CAD · TOOLPATHS · VIDEO", 10, 700, ls=1))
+    b.append(T(qx-9, qy+qs+30, "SCAN - CAD · TOOLPATHS · VIDEO", 10, 700, ls=1))
     # first-angle projection symbol + standards note
     px, py = 598, 322
     b.append(P(f"M{px},{py} l26,-6 v26 l-26,-6 z", 1.3)); b.append(f'<circle cx="{px+48}" cy="{py+7}" r="13" fill="none" stroke="{ENG}" stroke-width="1.3"/><circle cx="{px+48}" cy="{py+7}" r="7" fill="none" stroke="{ENG}" stroke-width="1.3"/>')
@@ -190,8 +198,8 @@ def back():
     b.append(T(px+78, py+3, "ISO 8015  ·  ISO 2768-fH", 10.5, 600, ls=1)); b.append(T(px+78, py+17, "AL 7075-T6  ·  ≈ 19.5 g", 10.5, 600, ls=1))
     # --- scallop comparator: three ball-nose patches
     sx, sy, sw = 62, 410, 64
-    b.append(T(sx, sy-10, "SCALLOP COMPARATOR · R1 BALL · h = s²/8R", 9, 700, ls=.5))
-    for i, (step, hgt) in enumerate([("0.30", "11 µm"), ("0.15", "2.8 µm"), ("0.05", "0.3 µm")]):
+    b.append(T(sx, sy-10, "SCALLOP COMPARATOR · R1.5 BALL · h = s·s/8R", 9, 700, ls=.5))
+    for i, (step, hgt) in enumerate([("0.30", "7.5 µm"), ("0.15", "1.9 µm"), ("0.05", "0.2 µm")]):
         x0 = sx + i*(sw+22)
         b.append(f'<rect x="{x0}" y="{sy}" width="{sw}" height="{sw}" fill="#b9bdc3" stroke="{ENG}" stroke-width="1.2"/>')
         pitch = float(step) * 10; k = 0
@@ -203,14 +211,14 @@ def back():
     X = lambda n: ox + (math.log10(n) - 4) / (math.log10(5e8) - 4) * gw
     Y = lambda sg: oy - sg / 400 * gh
     b.append(P(f"M{ox},{oy-gh-6} V{oy} H{ox+gw+6}", 1.3))
-    for e in range(4, 9): b.append(P(f"M{X(10**e):.1f},{oy} v4", 1)); b.append(T(X(10**e), oy+14, f"10{'⁴⁵⁶⁷⁸'[e-4]}", 8.5, 500, "middle", ls=0))
+    for e in range(4, 9): b.append(P(f"M{X(10**e):.1f},{oy} v4", 1)); b.append(T(X(10**e), oy+14, f"1E{e}", 8.5, 500, "middle", ls=0))
     for sg in (100, 200, 300, 400): b.append(P(f"M{ox-4},{Y(sg):.1f} h4", 1)); b.append(T(ox-7, Y(sg)+3, str(sg), 8.5, 500, "end", ls=0))
     b.append(P("M" + " L".join(f"{X(n):.1f},{Y(sg):.1f}" for n, sg in SN), 1.8))
     b.append(P(f"M{ox},{Y(134):.1f} H{ox+gw}", 1, ENG, extra='stroke-dasharray="5 3"'))
     b.append(f'<circle cx="{X(5e8):.1f}" cy="{Y(134):.1f}" r="3.6" fill="{ENG}"/>')
     b.append(T(ox+8, Y(134)+13, "THIS SPRING: 134 MPa @ ±1 mm", 8.8, 700, ls=.4))
-    b.append(T(ox+gw, oy-gh-2, "σₐ [MPa] vs N — 7075-T6, R = −1", 8.8, 600, "end", ls=.3))
-    b.append(T(ox+gw+2, oy-gh+12, "σ = Kₜ · 3Etδ / L²", 10.5, 600, "end", ls=.3, font=MONO))
+    b.append(T(ox+gw, oy-gh-2, "S-N  7075-T6  R=-1  [MPa]", 8.8, 600, "end", ls=.3))
+    b.append(T(ox+gw+2, oy-gh+12, "S = Kt·3·E·t·d / (L·L)", 10.5, 600, "end", ls=.3, font=MONO))
     # --- text block
     tx = 584
     b.append(T(tx, 384, "DESIGNED, PROGRAMMED", 12.5, 700, ls=1)); b.append(T(tx, 404, "AND MACHINED BY THE PERSON", 12.5, 700, ls=1)); b.append(T(tx, 424, "WHO HANDED IT TO YOU.", 12.5, 700, ls=1))
@@ -219,8 +227,8 @@ def back():
     b.append(T(tx, 496, "AVAILABLE SEPT. 2027", 12.5, 700, ls=1.4)); b.append(T(W-40, 496, "03 / 12", 12.5, 700, "end", ls=1.4))
     # --- rocket easter egg + micro text
     b.append(f'<g transform="translate(78,332) rotate(-90) scale(.8)">' + P("M230,0 c-14,-9 -30,-13 -46,-13 h-150 l-18,-12 v12 h-8 v26 h8 v12 l18,-12 h150 c16,0 32,-4 46,-13 z M184,-13 v26 M34,-13 v26", 1.1)
-             + T(40, 3.2, "LÉOFLY · TECH. DIRECTOR 2024–26", 8.2, 700, ls=.5) + "</g>")
-    b.append(f'<text {SANS} font-size="6.4" font-weight="600" fill="{ENG2}" letter-spacing="1.1" transform="translate({W-13},{H-52}) rotate(-90)">IF YOU CAN READ THIS, THE ENGRAVING BIT WAS SHARP  ·  NO LASER WAS USED ON THIS CARD</text>')
+             + T(40, 3.2, "LÉOFLY · TECH. DIRECTOR", 8.2, 700, ls=.5) + "</g>")
+    b.append(f'<g transform="translate({W-9},{H-46}) rotate(-90)">' + T(0, 0, "IF YOU CAN READ THIS, THE ENGRAVING BIT WAS SHARP · NO LASER WAS USED ON THIS CARD", 6.4, fill=ENG2, ls=1.1) + "</g>")
     return card(shade(None, seed=7), "\n".join(b))
 
 if __name__ == "__main__":

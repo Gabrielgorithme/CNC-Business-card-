@@ -48,36 +48,56 @@ Rule for the verso: every callout is a true, checkable statement about the card 
 
 To verify before engraving: S-N data against a referenced source, mass on a scale, G-code excerpt replaced by lines from the real program, final QR URL.
 
+## Lettering (v3)
+
+All text is ISOCP as Fusion draws it (`Isocp.shx`), which is a single-line font: every letter stroke is one centreline, and Fusion's "Bold" style does not change it. `design/v2/lettering.py` uses stroke data read out of Fusion (`cam/dump_isocp_from_fusion.py` regenerates it; the data file is not committed).
+
+- Smallest text: Fusion height 0.70 mm, which is a 0.61 mm capital.
+- Every text and every drawn line is engraved as a single V pass. Line width = 2 x depth, in four classes: 0.05, 0.075, 0.10 and 0.20 mm deep.
+- Only closed areas (QR modules, arrowheads, dots, datum triangles) are V-carved.
+- ISOCP has no Greek letters, arrows or long dashes, and superscripts fall under the minimum height, so those were rewritten (for example `1E4`, `S = Kt·3·E·t·d / (L·L)`).
+
 ## 3D model
 
 `cad/build_card.py` builds the card with CadQuery from the same layout as the mockup. Frame: X along the long edge, Y up as seen from the recto, Z = 0 on the finished verso (datum A), Z = 1.70 on the finished recto.
 
-Two versions are kept:
+- **v3 (current, 1.70 mm):** `card_v3_body.step` (machining geometry, no engraving) and `card_v3_engraved.stl` (visual mock-up). Renders in `design/v2/3d/`.
+- **v2 (2.00 mm):** geometry of the first test card and of the Fusion test CAM.
 
-- **v3 (current, 1.70 mm):** both faces are surfaced by 0.15 mm before engraving. Files `card_v3_*` and `engraving_v3_*`.
-- **v2 (2.00 mm, unsurfaced):** the geometry of the first test card and of the Fusion test CAM. Files `card_v2_*`, `engraving_*_model.dxf`.
+Mass 19.5 g in 7075 (computed). The flexure sizing only depends on the 0.40 mm web and is unchanged.
 
-| File (v3) | Use |
-|---|---|
-| `cad/card_v3_body.step` | Machining geometry: outline, chamfer, ripple surface, spring recesses and slots, hole. No engraving. |
-| `cad/engraving_v3_recto_model.dxf`, `cad/engraving_v3_verso_model.dxf` | Engraving contours in model coordinates, for CAM. |
-| `cad/engraving_v3_recto.dxf`, `cad/engraving_v3_verso_as_viewed.dxf` | The same contours drawn as you look at each face. |
-| `cad/card_v3_engraved.stl` | Visual mock-up with the engraving cut as flat pockets. |
-| `design/v2/3d/` | Renders of the v3 mock-up. |
+## CAM for v3 (Fusion, project "Business card", document "Card v3")
 
-Z stack of v3, measured from the finished faces:
+Inputs from `cad/export_cam_inputs.py`, all in model coordinates: `card_v3_body.step`, `engraving_v3_{verso,recto}_traces.dxf` (one layer per depth), `engraving_v3_verso_fills.dxf`, `cam_v3_helpers.dxf`. `cam/fusion_lib.py` holds the helpers used to build the operations through the Fusion API.
 
-| Zone | Recto cut | Verso cut | Material left |
-|---|---|---|---|
-| Ripple field | 0.14 max (0.02 step + 0.12 ripple) | V-carve, 0.02 to 0.15 for text | 1.41 or more |
-| Under the QR finder squares | 0.14 max | V-carve to 1.05 | 0.51 |
-| Name band | V-carve | V-carve | depends on stroke width |
-| Spring recess | 0.65 | 0.65 | 0.40 web, nothing engraved on it |
-| Boss | "GG" | none | about 1.5 |
+Process: tape and CA glue, face 0.13, machine and engrave, face a further 0.02 to deburr, flip about the long axis, repeat, part off in OP2.
 
-- Mass 19.5 g in 7075 (computed).
-- The flexure sizing is unchanged: it only depends on the 0.40 mm web.
-- The ripple's tightest concave radius is 1.69 mm, so any ball nose up to R1.5 follows it.
+Both setups: Z0 on the raw stock top, origin at the card centre, X along the long edge, finished face at Z-0.15. Stock 109.6 x 78 x 2.00. Two 3 mm reference holes at X = -50 and +50, Y = 0 are drilled in OP1 to locate OP2.
+
+| OP1 - Verso (25 min) | Tool | Z |
+|---|---|---|
+| 1 Face | T60 | -0.13 |
+| 2 Spring recess | T20 | -0.80 |
+| 3 Card hole and two reference holes, through | T20 | -2.10 |
+| 4 Outline groove, 0.1 left on the wall | T20 | -0.85 |
+| 5-7 Single-line engraving | T43 | -0.20, -0.225, -0.25 |
+| 8 V-carve fills | T43 | to -1.20 |
+| 9 Scallop comparator | T31 | -0.19 |
+| 10 Deburr face | T60 | -0.15 |
+| 11 Chamfer 0.15 | T43 | tip at -0.40 |
+
+| OP2 - Recto (44 min) | Tool | Z |
+|---|---|---|
+| 1 Face | T60 | -0.13 |
+| 2 Ripples, 0.1 stepover | T31 | to -0.29 |
+| 3 Spring recess | T20 | -0.80 |
+| 4 Spiral slots through the web | T10 | -1.25 |
+| 5-8 Single-line engraving | T43 | -0.20 to -0.35 |
+| 9 Deburr face | T60 | -0.15 |
+| 10 Chamfer 0.15 | T43 | tip at -0.40 |
+| 11 Part off | T20 | -1.93 |
+
+`cad/verify_nc_v3.py` replays the G-code posted for each operation against the design geometry; all 22 operations pass.
 
 ## Test CAM (Fusion, project "Business card", document "Card v2")
 

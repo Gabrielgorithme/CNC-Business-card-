@@ -70,28 +70,59 @@ def text_shape(el):
     m = el.transform
     return affinity.affine_transform(g, [m.a, m.c, m.b, m.d, m.e, m.f])
 
-def path_shape(el, stroke, fill):
-    p = se.Path(el) if not isinstance(el, se.Path) else el
-    p = abs(p)                                           # apply transforms
-    out = []
+def polylines(el):
+    """Sub-paths of an SVG shape as point lists (SVG units, transforms applied)."""
+    p = abs(se.Path(el) if not isinstance(el, se.Path) else el)
+    res = []
     for sub in p.as_subpaths():
         sp = se.Path(sub)
         if len(sp) < 2: continue
-        n = max(2, int(sp.length(error=1e-3) / 1.5) + 1)
-        segs_curved = any(isinstance(s, (se.Arc, se.CubicBezier, se.QuadraticBezier)) for s in sp)
-        if segs_curved: pts = [(pt.x, pt.y) for pt in (sp.point(i / (n * 4)) for i in range(n * 4 + 1))]
+        if any(isinstance(g, (se.Arc, se.CubicBezier, se.QuadraticBezier)) for g in sp):
+            n = max(8, int(sp.length(error=1e-3) / 1.5) * 4)
+            pts = [(q.x, q.y) for q in (sp.point(i / n) for i in range(n + 1))]
         else:
-            pts = []
-            for s in sp:
-                if isinstance(s, se.Move): pts.append((s.end.x, s.end.y))
-                elif isinstance(s, (se.Line, se.Close)) and s.end is not None: pts.append((s.end.x, s.end.y))
+            pts = [(g.end.x, g.end.y) for g in sp if isinstance(g, (se.Move, se.Line, se.Close)) and g.end is not None]
         pts = [q for i, q in enumerate(pts) if i == 0 or q != pts[i - 1]]
-        if len(pts) < 2: continue
+        if len(pts) >= 2: res.append(pts)
+    return res
+
+def path_shape(el, stroke, fill):
+    out = []
+    for pts in polylines(el):
         if fill and len(pts) >= 3: out.append(Polygon(pts).buffer(0))
         if stroke:
             w = float(el.values.get("stroke-width", 1))
             out.append(LineString(pts).buffer(w / 2, cap_style=2, join_style=2))
     return unary_union(out) if out else None
+
+def to_model(geom, mirror):
+    g = affinity.affine_transform(affinity.translate(geom, -30, -30), [0.1, 0, 0, -0.1 * SY, 0, Wd])
+    return affinity.affine_transform(g, [-1, 0, 0, 1, L, 0]) if mirror else g
+
+TRACE_CLASSES = (0.05, 0.075, 0.10, 0.20)          # V depth [mm]; line width = 2 x depth
+def trace_class(stroke_width_units):
+    w = stroke_width_units / 10
+    return 0.05 if w <= 0.125 else 0.075 if w <= 0.175 else 0.10 if w <= 0.30 else 0.20
+
+def cam_geometry(svg_text, mirror):
+    """What the CAM engraves on one face, in model mm:
+    traces  {depth: [LineString]}  single-line V passes (all text and all drawn lines)
+    fills   MultiPolygon           closed areas to V-carve (QR modules, arrowheads, dots, datum triangles)"""
+    import io
+    doc = se.SVG.parse(io.StringIO(svg_text), reify=False)
+    traces = {d: [] for d in TRACE_CLASSES}; fills = []
+    fill_colours = ENGRAVE_COLOURS - {"#b9bdc3"}
+    for el in doc.elements():
+        if isinstance(el, (se.SVG, se.Group, se.Image, se.ClipPath, se.Text)) or not hasattr(el, "values") or not isinstance(el, se.Shape): continue
+        v = el.values
+        stroke = v.get("stroke") in ENGRAVE_COLOURS; fill = v.get("fill") in fill_colours
+        if fill:
+            g = path_shape(el, stroke, True)
+            if g is not None and not g.is_empty: fills.append(to_model(g, mirror))
+        elif stroke:
+            d = trace_class(float(v.get("stroke-width", 1)))
+            for pts in polylines(el): traces[d].append(to_model(LineString(pts), mirror))
+    return traces, unary_union(fills)
 
 def engraving(svg_text, mirror, colours=None):
     """Union of everything engraved on one face, in card-frame mm."""
@@ -194,5 +225,3 @@ if __name__ == "__main__":
     cq.exporters.export(cq.Workplane(obj=body), str(out / "card_v3_body.step"))          # machining geometry, no engraving
     cq.exporters.export(cq.Workplane(obj=card), str(out / "card_v3_engraved.step"))      # visual mock-up, engraving as 0.10/0.15 pockets
     cq.exporters.export(cq.Workplane(obj=card), str(out / "card_v3_engraved.stl"), tolerance=0.004, angularTolerance=0.08)
-    dxf(recto, out / "engraving_v3_recto.dxf")
-    dxf(affinity.affine_transform(verso, [-1, 0, 0, 1, L, 0]), out / "engraving_v3_verso_as_viewed.dxf")
