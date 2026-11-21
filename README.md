@@ -47,6 +47,32 @@ Rule for the verso: every callout is a true, checkable statement about the card 
 
 To verify before engraving: S-N data against a referenced source, mass on a scale, G-code excerpt replaced by lines from the real program, final QR URL.
 
+## 3D model
+
+`cad/build_card.py` builds the card with CadQuery from the same layout as the mockup. Frame: X along the long edge, Y up as seen from the recto, Z = 0 on the verso (datum A), Z = 2 on the recto.
+
+| File | Use |
+|---|---|
+| `cad/card_v2_body.step` | Machining geometry: outline, chamfer, ripple surface, spring pockets and slots, Ø3 hole. No engraving. |
+| `cad/engraving_recto.dxf`, `cad/engraving_verso_as_viewed.dxf` | Closed contours of everything engraved, each drawn as you look at that face. |
+| `cad/card_v2_engraved.stl` | Visual mock-up with the engraving cut as flat pockets (0.15 mm recto, 0.10 mm verso). |
+| `design/v2/3d/` | Renders of the mock-up. |
+
+The engraved STEP (68 MB) is not committed; the script regenerates it.
+
+Z stack and clearances:
+
+| Zone | Recto cut | Verso cut | Material left |
+|---|---|---|---|
+| Ripple field | 0.12 max (ripple) | 0.10 (engraving) | 1.78 |
+| Name band | 0.15 (engraving) | 0.10 (engraving) | 1.75 |
+| Spring pocket | 0.80 | 0.80 | 0.40 web, nothing engraved on it |
+| Boss (Ø9.6) | 0.15 ("GG") | none | 1.85 |
+
+- Engraving is kept 0.3 mm away from the pocket rim and 0.25 mm from the hole.
+- The ripple is a revolved spline about the spring axis. Its tightest concave radius is 1.69 mm, so any ball nose up to R1.5 follows it.
+- With a 90° engraving tool, groove width = 2 × depth. Fully V-carving the widest engraved feature (a 0.68 mm QR module) goes 0.34 mm deep, which still leaves more than 1.2 mm anywhere outside the pocket.
+
 ## Earlier concepts (v1)
 
 Three first directions are kept in `design/mockups/`: A drawing sheet, B ripple, C digital thread.

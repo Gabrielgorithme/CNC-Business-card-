@@ -215,7 +215,7 @@ def back():
     tx = 584
     b.append(T(tx, 384, "DESIGNED, PROGRAMMED", 12.5, 700, ls=1)); b.append(T(tx, 404, "AND MACHINED BY THE PERSON", 12.5, 700, ls=1)); b.append(T(tx, 424, "WHO HANDED IT TO YOU.", 12.5, 700, ls=1))
     b.append(P(f"M{tx},437 H{W-40}", 1))
-    b.append(T(tx, 456, "+33 6 60 45 50 18", 12.5, 600, ls=1.4)); b.append(T(tx, 473, "EMAIL — TO CONFIRM", 12.5, 600, ls=1.4))
+    b.append(T(tx, 456, "+33 6 60 45 50 18", 12.5, 600, ls=1.4)); b.append(T(tx, 473, "GABRIEL.GHANEM@GMAIL.COM", 12, 600, ls=1))
     b.append(T(tx, 496, "AVAILABLE SEPT. 2027", 12.5, 700, ls=1.4)); b.append(T(W-40, 496, "03 / 12", 12.5, 700, "end", ls=1.4))
     # --- rocket easter egg + micro text
     b.append(f'<g transform="translate(78,332) rotate(-90) scale(.8)">' + P("M230,0 c-14,-9 -30,-13 -46,-13 h-150 l-18,-12 v12 h-8 v26 h8 v12 l18,-12 h150 c16,0 32,-4 46,-13 z M184,-13 v26 M34,-13 v26", 1.1)
