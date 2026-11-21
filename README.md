@@ -99,6 +99,9 @@ Both setups: Z0 on the raw stock top, origin at the card centre, X along the lon
 
 `cad/verify_nc_v3.py` replays the G-code posted for each operation against the design geometry; all 22 operations pass.
 
+- `cam/Card_v3.f3d`: the Fusion document with both setups and all toolpaths (File > Open in Fusion).
+- `cam/gcode_check_v3/`: one G-code file per operation, posted with a grbl post for the check above. They are check files, not a program to run: re-post from Fusion for the machine.
+
 ## Test CAM (Fusion, project "Business card", document "Card v2")
 
 This CAM is for the first test card on the v2 geometry (2.00 mm, no surfacing). It has not been moved to v3.
