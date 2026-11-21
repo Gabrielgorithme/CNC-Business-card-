@@ -5,7 +5,7 @@ import build_card as B
 out = pathlib.Path(__file__).parent
 body, _, recto, verso = B.build(engrave=False)
 print("solids:", len(body.Solids()), "valid:", body.isValid(), "volume %.1f" % body.Volume())
-cq.exporters.export(cq.Workplane(obj=body), str(out / "card_v2_body.step"))
+cq.exporters.export(cq.Workplane(obj=body), str(out / "card_v3_body.step"))
 # verso contours for the V-carve: no comparator patches (those are surfaced with ball mills)
 keep_out = Point(*B.SPR).buffer(B.R_POCKET + 0.3).difference(Point(*B.SPR).buffer(B.R_BOSS - 0.3)).union(Point(B.HOLE[0], B.HOLE[1]).buffer(B.HOLE[2] / 2 + 0.25))
 v = B.engraving(B.G.back(), True, B.ENGRAVE_COLOURS - {"#b9bdc3"}).difference(keep_out).intersection(box(0, 0, B.L, B.Wd))
@@ -18,8 +18,8 @@ def dxf(region, path, tol):
             for ring in [q.exterior, *q.interiors]:
                 pts = list(ring.coords)[:-1]; msp.add_lwpolyline(pts, close=True); n += len(pts); k += 1
     d.saveas(path); print(path.name, "loops", k, "vertices", n)
-dxf(v, out / "engraving_verso_model.dxf", 0.008)
-dxf(recto, out / "engraving_recto_model.dxf", 0.008)
+dxf(v, out / "engraving_v3_verso_model.dxf", 0.008)
+dxf(recto, out / "engraving_v3_recto_model.dxf", 0.008)
 import shapely
 ws = [2 * shapely.maximum_inscribed_circle(g).length for g in v.geoms if g.area > 0.3]
 print("widest engraved feature (inscribed circle dia): %.2f mm" % max(ws))

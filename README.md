@@ -10,8 +10,9 @@ The card is a PLM demo in the hand: part number, revision, serial, and a QR code
 |---|---|
 | Format | ISO ID-1, 85.60 × 53.98 mm, corner radius 3.18 mm |
 | Stock | 2 mm aluminium plate, 7075-T6 for the flexure |
+| Finished thickness | 1.70 mm: 0.15 mm faced off each side before engraving (v3) |
 | Faces | Engraved recto and verso (flip with dowel-pin registration) |
-| Flexure | Orthoplanar spring, 3 spiral legs, Ø26 mm pocket, web 0.40 mm centred in the thickness |
+| Flexure | Orthoplanar spring, 3 spiral legs, Ø26 mm pocket, web 0.40 mm centred in the thickness (recess 0.65 mm from each finished face) |
 | QR | Points to the GitHub Pages site served from `docs/` (final short URL to be decided before engraving) |
 
 ## Flexure sizing (first pass)
@@ -49,33 +50,40 @@ To verify before engraving: S-N data against a referenced source, mass on a scal
 
 ## 3D model
 
-`cad/build_card.py` builds the card with CadQuery from the same layout as the mockup. Frame: X along the long edge, Y up as seen from the recto, Z = 0 on the verso (datum A), Z = 2 on the recto.
+`cad/build_card.py` builds the card with CadQuery from the same layout as the mockup. Frame: X along the long edge, Y up as seen from the recto, Z = 0 on the finished verso (datum A), Z = 1.70 on the finished recto.
 
-| File | Use |
+Two versions are kept:
+
+- **v3 (current, 1.70 mm):** both faces are surfaced by 0.15 mm before engraving. Files `card_v3_*` and `engraving_v3_*`.
+- **v2 (2.00 mm, unsurfaced):** the geometry of the first test card and of the Fusion test CAM. Files `card_v2_*`, `engraving_*_model.dxf`.
+
+| File (v3) | Use |
 |---|---|
-| `cad/card_v2_body.step` | Machining geometry: outline, chamfer, ripple surface, spring pockets and slots, Ø3 hole. No engraving. |
-| `cad/engraving_recto.dxf`, `cad/engraving_verso_as_viewed.dxf` | Closed contours of everything engraved, each drawn as you look at that face. |
-| `cad/card_v2_engraved.stl` | Visual mock-up with the engraving cut as flat pockets (0.15 mm recto, 0.10 mm verso). |
-| `design/v2/3d/` | Renders of the mock-up. |
+| `cad/card_v3_body.step` | Machining geometry: outline, chamfer, ripple surface, spring recesses and slots, hole. No engraving. |
+| `cad/engraving_v3_recto_model.dxf`, `cad/engraving_v3_verso_model.dxf` | Engraving contours in model coordinates, for CAM. |
+| `cad/engraving_v3_recto.dxf`, `cad/engraving_v3_verso_as_viewed.dxf` | The same contours drawn as you look at each face. |
+| `cad/card_v3_engraved.stl` | Visual mock-up with the engraving cut as flat pockets. |
+| `design/v2/3d/` | Renders of the v3 mock-up. |
 
-The engraved STEP (68 MB) is not committed; the script regenerates it.
-
-Z stack and clearances:
+Z stack of v3, measured from the finished faces:
 
 | Zone | Recto cut | Verso cut | Material left |
 |---|---|---|---|
-| Ripple field | 0.12 max (ripple) | 0.10 (engraving) | 1.78 |
-| Name band | 0.15 (engraving) | 0.10 (engraving) | 1.75 |
-| Spring pocket | 0.80 | 0.80 | 0.40 web, nothing engraved on it |
-| Boss (Ø9.6) | 0.15 ("GG") | none | 1.85 |
+| Ripple field | 0.14 max (0.02 step + 0.12 ripple) | V-carve, 0.02 to 0.15 for text | 1.41 or more |
+| Under the QR finder squares | 0.14 max | V-carve to 1.05 | 0.51 |
+| Name band | V-carve | V-carve | depends on stroke width |
+| Spring recess | 0.65 | 0.65 | 0.40 web, nothing engraved on it |
+| Boss | "GG" | none | about 1.5 |
 
-- Engraving is kept 0.3 mm away from the pocket rim and 0.25 mm from the hole.
-- The ripple is a revolved spline about the spring axis. Its tightest concave radius is 1.69 mm, so any ball nose up to R1.5 follows it.
-- With a 90° engraving tool, groove width = 2 × depth. Fully V-carving the widest engraved feature (a 0.68 mm QR module) goes 0.34 mm deep, which still leaves more than 1.2 mm anywhere outside the pocket.
+- Mass 19.5 g in 7075 (computed).
+- The flexure sizing is unchanged: it only depends on the 0.40 mm web.
+- The ripple's tightest concave radius is 1.69 mm, so any ball nose up to R1.5 follows it.
 
-## CAM (Fusion, project "Business card", document "Card v2")
+## Test CAM (Fusion, project "Business card", document "Card v2")
 
-`cad/export_cam_inputs.py` writes what Fusion needs: `card_v2_body.step` and the engraving contours in model coordinates (`engraving_verso_model.dxf`, `engraving_recto_model.dxf`). The comparator patches are left out of the verso contours; they are surfaced with ball mills.
+This CAM is for the first test card on the v2 geometry (2.00 mm, no surfacing). It has not been moved to v3.
+
+`cad/export_cam_inputs.py` writes what Fusion needs: the body STEP and the engraving contours in model coordinates (now the v3 files; the test CAM used `card_v2_body.step`, `engraving_verso_model.dxf` and `engraving_recto_model.dxf`). The comparator patches are left out of the verso contours; they are surfaced with ball mills.
 
 Setup "OP1 - Verso": verso up, WCS at the stock top centre (= card centre), X along the long edge, stock 105.6 x 73.98 x 2 (10 mm margin).
 

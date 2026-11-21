@@ -187,7 +187,7 @@ def back():
     px, py = 598, 322
     b.append(P(f"M{px},{py} l26,-6 v26 l-26,-6 z", 1.3)); b.append(f'<circle cx="{px+48}" cy="{py+7}" r="13" fill="none" stroke="{ENG}" stroke-width="1.3"/><circle cx="{px+48}" cy="{py+7}" r="7" fill="none" stroke="{ENG}" stroke-width="1.3"/>')
     b.append(P(f"M{px-6},{py+7} h76", .8, ENG2, extra='stroke-dasharray="9 3 2 3"'))
-    b.append(T(px+78, py+3, "ISO 8015  ·  ISO 2768-fH", 10.5, 600, ls=1)); b.append(T(px+78, py+17, "AL 7075-T6  ·  ≈ 23 g", 10.5, 600, ls=1))
+    b.append(T(px+78, py+3, "ISO 8015  ·  ISO 2768-fH", 10.5, 600, ls=1)); b.append(T(px+78, py+17, "AL 7075-T6  ·  ≈ 19.5 g", 10.5, 600, ls=1))
     # --- scallop comparator: three ball-nose patches
     sx, sy, sw = 62, 410, 64
     b.append(T(sx, sy-10, "SCALLOP COMPARATOR · R1 BALL · h = s²/8R", 9, 700, ls=.5))

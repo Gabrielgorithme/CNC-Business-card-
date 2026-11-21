@@ -18,11 +18,12 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "design" / "v2"))
 import generate as G
 
-L, Wd, T = 85.60, 53.98, 2.00          # card
+STOCK_T, SKIM_PER_SIDE = 2.00, 0.15    # raw plate, and what is faced off each side before engraving
+L, Wd, T = 85.60, 53.98, STOCK_T - 2 * SKIM_PER_SIDE   # finished card: 1.70 thick
 R_CORNER, CHAMFER = 3.18, 0.15
 SPR = (G.SPR[0], Wd - G.SPR[1])        # spring centre, card frame
 R_POCKET, R_BOSS, WEB = 13.0, 4.8, 0.40
-POCKET_DEPTH = (T - WEB) / 2           # 0.80 from each face
+POCKET_DEPTH = (T - WEB) / 2           # 0.65 from each finished face, web centred
 SLOT_W = 1.0
 HOLE = (L - 5.0, Wd - 5.0, 3.0)        # x, y, diameter (5 mm from datums B/C seen from verso)
 ENGRAVE_VERSO, ENGRAVE_RECTO = 0.10, 0.15
@@ -190,8 +191,8 @@ if __name__ == "__main__":
     body, card, recto, verso = build()
     print("valid:", card.isValid(), " volume %.1f mm3" % card.Volume(), " mass 7075 %.1f g" % (card.Volume() * 2.81e-3))
     bb = card.BoundingBox(); print("bbox", round(bb.xlen, 3), round(bb.ylen, 3), round(bb.zlen, 3))
-    cq.exporters.export(cq.Workplane(obj=body), str(out / "card_v2_body.step"))          # machining geometry, no engraving
-    cq.exporters.export(cq.Workplane(obj=card), str(out / "card_v2_engraved.step"))      # visual mock-up, engraving as 0.10/0.15 pockets
-    cq.exporters.export(cq.Workplane(obj=card), str(out / "card_v2_engraved.stl"), tolerance=0.004, angularTolerance=0.08)
-    dxf(recto, out / "engraving_recto.dxf")
-    dxf(affinity.affine_transform(verso, [-1, 0, 0, 1, L, 0]), out / "engraving_verso_as_viewed.dxf")
+    cq.exporters.export(cq.Workplane(obj=body), str(out / "card_v3_body.step"))          # machining geometry, no engraving
+    cq.exporters.export(cq.Workplane(obj=card), str(out / "card_v3_engraved.step"))      # visual mock-up, engraving as 0.10/0.15 pockets
+    cq.exporters.export(cq.Workplane(obj=card), str(out / "card_v3_engraved.stl"), tolerance=0.004, angularTolerance=0.08)
+    dxf(recto, out / "engraving_v3_recto.dxf")
+    dxf(affinity.affine_transform(verso, [-1, 0, 0, 1, L, 0]), out / "engraving_v3_verso_as_viewed.dxf")
