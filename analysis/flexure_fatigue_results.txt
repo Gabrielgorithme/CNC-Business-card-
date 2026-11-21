@@ -1,0 +1,22 @@
+
+7075-T6  (yield 503 MPa, fatigue 300/230/159 MPa at 1e5/1e6/5e8 cycles)
+ t[mm]  L[mm]  k[N/mm]  sigma@1mm  life@1mm     sigma@3mm  yields?
+  0.3     20     1.89       226       >1e6         678   YES
+  0.3     30     0.56       100       >5e8         301   no
+  0.4     20     4.47       301       <1e5         903   YES
+  0.4     30     1.33       134       >5e8         402   no
+  0.5     20     8.74       376       <1e5        1129   YES
+  0.5     30     2.59       167       >1e6         502   no
+  0.6     20    15.10       452       <1e5        1355   YES
+  0.6     30     4.47       201       >1e6         602   YES
+
+6061-T6  (yield 276 MPa, fatigue 200/140/97 MPa at 1e5/1e6/5e8 cycles)
+ t[mm]  L[mm]  k[N/mm]  sigma@1mm  life@1mm     sigma@3mm  yields?
+  0.3     20     1.81       217       <1e5         651   YES
+  0.3     30     0.54        96       >5e8         289   YES
+  0.4     20     4.30       289       <1e5         868   YES
+  0.4     30     1.27       129       >1e6         386   YES
+  0.5     20     8.40       362       <1e5        1085   YES
+  0.5     30     2.49       161       >1e5         482   YES
+  0.6     20    14.51       434       <1e5        1302   YES
+  0.6     30     4.30       193       >1e5         579   YES
