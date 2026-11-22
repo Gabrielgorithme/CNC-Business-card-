@@ -25,7 +25,7 @@ SPR = (G.SPR[0], Wd - G.SPR[1])        # spring centre, card frame
 R_POCKET, R_BOSS, WEB = 13.0, 4.8, 0.40
 POCKET_DEPTH = (T - WEB) / 2           # 0.65 from each finished face, web centred
 SLOT_W = 1.0
-HOLE = (L - 5.0, Wd - 5.0, 3.0)        # x, y, diameter (5 mm from datums B/C seen from verso)
+HOLE = (L - 5.0, Wd - 5.0, G.HOLE_D)   # x, y, diameter: 3.05 as milled, callout "3 D11" (3.020 to 3.080). 5 mm from the left and top edges seen from the verso
 ENGRAVE_VERSO, ENGRAVE_RECTO = 0.10, 0.15
 SKIM = 0.02                            # the ripple field sits this far below the raw face, so crests are machined too
 BAND_Y = Wd - G.BAND_Y
@@ -194,7 +194,7 @@ def build(engrave=True):
         slots.append(LineString(sp).buffer(SLOT_W / 2, resolution=12))
     card = cut_all(card, to_solids(unary_union(slots), POCKET_DEPTH - 0.1, T - POCKET_DEPTH + 0.1))
 
-    # reamed hole
+    # locating hole (milled, not reamed)
     card = card.cut(cq.Workplane("XY").center(HOLE[0], HOLE[1]).circle(HOLE[2] / 2).extrude(T).val())
 
     # engraving, both faces, kept out of the pocket and the hole

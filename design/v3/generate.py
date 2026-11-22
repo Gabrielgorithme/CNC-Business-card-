@@ -8,13 +8,16 @@ from PIL import Image
 OUT = pathlib.Path(__file__).parent
 W, H, R = 856, 540, 32
 CARD_W, CARD_H = 85.6, 53.98
-URL = "https://gabrielgorithme.github.io/CNC-Business-card-/"   # placeholder
+URL = "https://gabrielgorithme.github.io/CNC-Business-card-/"   # the portfolio page in docs/; 33 x 33 modules, scans on the machined test card
+QR_CAPTION = "SCAN - PORTFOLIO"
 ENG, ENG2, CUT = "#3f454c", "#6f767f", "#0f1113"
 SANS = "font-family=\"'DejaVu Sans Condensed','DIN Alternate','Bahnschrift','Roboto Condensed',Arial,sans-serif\""
 MONO = "font-family=\"'DejaVu Sans Mono','Menlo','Consolas',monospace\""
 SPR = (59.0, 22.0)            # spring centre on the recto [mm]
 LAMBDA, AMP = 2.0, 0.12       # ripple wavelength and amplitude [mm]
 BAND_Y = 39.2                 # flat name band starts here [mm]
+HOLE_D = 3.05                 # card hole as the CAM mills it [mm]; cad/build_card.py takes it from here
+HOLE_FIT, HOLE_DEV = "Ø3 D11", ("+0.080", "+0.020")   # limits 3.020 / 3.080, mean 3.050 = HOLE_D
 
 def ripple_height(x, y):
     """Height in mm (0 = original face, negative = cut)."""
@@ -79,23 +82,25 @@ DEFS = f'''<radialGradient id="pocket"><stop offset="0" stop-color="#aeb3b9"/><s
 <clipPath id="clip"><rect width="{W}" height="{H}" rx="{R}"/></clipPath>'''
 
 def card(img, body):
+    """img: shaded metal texture (data URI), or None for the plain vector artwork."""
+    ground = f'<image href="{img}" xlink:href="{img}" x="0" y="0" width="{W}" height="{H}" preserveAspectRatio="none"/>' if img else f'<rect width="{W}" height="{H}" fill="#d2d5d9"/>'
     return f'''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-30 -30 {W+60} {H+60}">
 <defs>{DEFS}</defs>
 <rect width="{W}" height="{H}" rx="{R}" fill="#c9ccd0" filter="url(#sh)"/>
-<g clip-path="url(#clip)"><image href="{img}" xlink:href="{img}" x="0" y="0" width="{W}" height="{H}" preserveAspectRatio="none"/>{body}</g>
+<g clip-path="url(#clip)">{ground}{body}</g>
 <rect x="1.5" y="1.5" width="{W-3}" height="{H-3}" rx="{R-1}" fill="none" stroke="#fafbfc" stroke-width="3" opacity=".75"/>
 <rect x="0" y="0" width="{W}" height="{H}" rx="{R}" fill="none" stroke="#50565d" stroke-width="1" opacity=".6"/>
 </svg>'''
 
 # ------------------------------------------------------------------ recto
-def front():
+def front(texture=True):
     cx, cy = SPR[0]*10, SPR[1]*10
     b = [spring(cx, cy, 1, "GG")]
     b.append(P(f"M0,{BAND_Y*10} H{W}", 1.2, "#5d646c"))
     b.append(T(48, 462, "GABRIEL GHANEM", 46, 700, ls=6))
     b.append(T(50, 500, "MANUFACTURING ENGINEER", 16, 500, ls=5.2))
     b.append(T(W-48, 500, "GG-2027-001  ·  REV C", 12, 500, "end", ENG2, 2))
-    return card(shade(ripple_height), "\n".join(b))
+    return card(shade(ripple_height) if texture else None, "\n".join(b))
 
 # ------------------------------------------------------------------ verso helpers
 def gdt_symbol(kind, x, y):
@@ -147,7 +152,7 @@ def qr(x, y, size):
 
 SN = [(1e4, 380), (1e5, 300), (1e6, 230), (1e7, 185), (1e8, 165), (5e8, 159)]   # 7075-T6, R=-1, approx.
 
-def back():
+def back(texture=True):
     b = []
     cx, cy = W - SPR[0]*10, SPR[1]*10            # mirrored: (266, 220)
     # --- mm rulers on two edges
@@ -165,12 +170,14 @@ def back():
     b.append(T(cx+164, cy-164, "3× FLEXURE LEG", 12, 700, ls=1.6))
     b.append(T(cx+164, cy-148, "WEB 0.40 ±0.02", 13, 600))
     s, w_ = fcf(cx+164, cy-140, "profile", "0.05", ("A",)); b.append(s)
-    # --- reamed hole, basic dimensions, position tolerance
+    # --- locating hole for the flip: milled (helical, 2 mm end mill) to 3.05 for a 3 mm pin.
+    # ISO 286: D11 on a nominal 3 is +0.080/+0.020, i.e. 3.020 to 3.080, centred on the 3.05 the CAM cuts.
     hx, hy = 50, 50
-    b.append(f'<circle cx="{hx}" cy="{hy}" r="15" fill="{CUT}" stroke="#30353a" stroke-width="1.5"/><circle cx="{hx}" cy="{hy}" r="17.5" fill="none" stroke="#f1f3f5" stroke-width="1.2" opacity=".8"/>')
+    hr = HOLE_D * 5                                # drawn radius [units]
+    b.append(f'<circle cx="{hx}" cy="{hy}" r="{hr:g}" fill="{CUT}" stroke="#30353a" stroke-width="1.5"/><circle cx="{hx}" cy="{hy}" r="{hr + 2.5:g}" fill="none" stroke="#f1f3f5" stroke-width="1.2" opacity=".8"/>')
     b.append(P(f"M{hx-24},{hy} h48 M{hx},{hy-24} v48", .9, ENG2, extra='stroke-dasharray="9 3 2 3"'))
     b.append(P(f"M{hx+11},{hy-11} L{hx+34},{hy-30} h14", 1.2)); b.append(arrow(hx+11, hy-11, 140))
-    b.append(T(hx+52, hy-25, "Ø3 H7", 15, 700)); b.append(T(hx+106, hy-30, "+0.010", 9, 600, ls=.3)); b.append(T(hx+106, hy-20, " 0", 9, 600, ls=.3))
+    b.append(T(hx+52, hy-25, HOLE_FIT, 15, 700)); b.append(T(hx+110, hy-30, HOLE_DEV[0], 9, 600, ls=.3)); b.append(T(hx+110, hy-20, HOLE_DEV[1], 9, 600, ls=.3))
     s, w_ = fcf(hx+52, hy-16, "position", "Ø0.05", ("A", "B", "C")); b.append(s)
     b.append(P(f"M{hx},{hy+26} v62 M0,{hy+78} h{hx}", 1)); b.append(arrow(hx, hy+78, 0)); b.append(basic(hx+22, hy+78, "5"))
     # --- datums: A (this face, via the flatness frame), B (long edge), C (short edge)
@@ -190,7 +197,7 @@ def back():
     # --- QR
     qx, qy, qs = 594, 50, 222
     b.append(qr(qx, qy, qs))
-    b.append(T(qx-9, qy+qs+30, "SCAN - CAD · TOOLPATHS · VIDEO", 10, 700, ls=1))
+    b.append(T(qx+qs/2, qy+qs+31, QR_CAPTION, 12, 700, "middle", ls=3))
     # first-angle projection symbol + standards note
     px, py = 598, 322
     b.append(P(f"M{px},{py} l26,-6 v26 l-26,-6 z", 1.3)); b.append(f'<circle cx="{px+48}" cy="{py+7}" r="13" fill="none" stroke="{ENG}" stroke-width="1.3"/><circle cx="{px+48}" cy="{py+7}" r="7" fill="none" stroke="{ENG}" stroke-width="1.3"/>')
@@ -229,7 +236,11 @@ def back():
     b.append(f'<g transform="translate(78,332) rotate(-90) scale(.8)">' + P("M230,0 c-14,-9 -30,-13 -46,-13 h-150 l-18,-12 v12 h-8 v26 h8 v12 l18,-12 h150 c16,0 32,-4 46,-13 z M184,-13 v26 M34,-13 v26", 1.1)
              + T(40, 3.2, "LÉOFLY · TECH. DIRECTOR", 8.2, 700, ls=.5) + "</g>")
     b.append(f'<g transform="translate({W-9},{H-46}) rotate(-90)">' + T(0, 0, "IF YOU CAN READ THIS, THE ENGRAVING BIT WAS SHARP · NO LASER WAS USED ON THIS CARD", 6.4, fill=ENG2, ls=1.1) + "</g>")
-    return card(shade(None, seed=7), "\n".join(b))
+    return card(shade(None, seed=7) if texture else None, "\n".join(b))
 
 if __name__ == "__main__":
-    (OUT / "v3_front.svg").write_text(front()); (OUT / "v3_back.svg").write_text(back())
+    # v3_*.svg carry the shaded metal texture and are only the source of the PNG mockups (render_png.cjs); they are not committed.
+    # v3_*_artwork.svg are the same drawing on a flat ground: pure vectors, what the CAM inputs are derived from.
+    for name, fn in (("front", front), ("back", back)):
+        (OUT / f"v3_{name}.svg").write_text(fn(), encoding="utf-8")
+        (OUT / f"v3_{name}_artwork.svg").write_text(fn(texture=False), encoding="utf-8")
