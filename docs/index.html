@@ -1,5 +1,146 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gabriel Ghanem — the card you are holding</title>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#15171a;color:#d9dce0;font-family:system-ui,sans-serif;text-align:center;padding:24px}h1{letter-spacing:.2em;font-size:1.4rem}p{color:#8b9199}</style></head>
-<body><main><h1>GABRIEL GHANEM</h1><p>Digital twin of the card — under construction.</p></main></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gabriel Ghanem — manufacturing engineer</title>
+<meta name="description" content="Gabriel Ghanem, manufacturing engineer. The digital twin of the aluminium card you are holding, and the work behind it.">
+<style>
+  :root { --bg:#14161a; --panel:#1c1f24; --line:#2e333a; --text:#e4e7ea; --dim:#a3a9b1; --metal:#c9cdd2; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color:var(--metal); text-underline-offset:3px; } a:hover { color:#fff; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 20px; }
+  .label { font:600 12px/1.4 ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+  header { padding:56px 0 28px; border-bottom:1px solid var(--line); }
+  h1 { margin:10px 0 6px; font-size:clamp(2rem, 7vw, 3.4rem); line-height:1.05; letter-spacing:.06em; font-weight:650; }
+  .lead { font-size:1.15rem; color:var(--metal); margin:0 0 18px; }
+  nav { display:flex; flex-wrap:wrap; gap:10px; }
+  nav a { display:inline-block; padding:11px 16px; min-height:44px; border:1px solid var(--line); border-radius:6px; text-decoration:none; font-weight:600; }
+  nav a.primary { background:var(--metal); color:#14161a; border-color:var(--metal); }
+  section { padding:44px 0; border-bottom:1px solid var(--line); }
+  h2 { margin:8px 0 14px; font-size:1.55rem; letter-spacing:.02em; }
+  p { margin:0 0 14px; max-width:68ch; }
+  figure { margin:22px 0 0; }
+  figure img { display:block; width:100%; height:auto; border-radius:8px; border:1px solid var(--line); }
+  figcaption { margin-top:8px; font-size:.86rem; color:var(--dim); }
+  .two { display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
+  table { width:100%; border-collapse:collapse; margin-top:18px; font-size:.95rem; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { width:38%; color:var(--dim); font-weight:600; }
+  ol.steps { margin:16px 0 0; padding:0; list-style:none; counter-reset:s; display:grid; gap:10px; }
+  ol.steps li { counter-increment:s; padding:12px 14px 12px 52px; position:relative; background:var(--panel); border:1px solid var(--line); border-radius:8px; }
+  ol.steps li::before { content:counter(s, decimal-leading-zero); position:absolute; left:14px; top:12px; font:600 13px ui-monospace, Menlo, Consolas, monospace; color:var(--dim); }
+  .cards { display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); margin-top:18px; }
+  article { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; }
+  article img { display:block; width:100%; height:auto; border-radius:6px; margin-bottom:12px; }
+  article h3 { margin:6px 0 8px; font-size:1.1rem; }
+  article p { font-size:.95rem; color:var(--metal); margin:0; }
+  footer { padding:36px 0 60px; color:var(--dim); font-size:.9rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="label">Part GG-2027-001 · Rev C · Digital twin</div>
+    <h1>GABRIEL GHANEM</h1>
+    <p class="lead">Manufacturing engineer. From CAD to chips.</p>
+    <p>You are holding a card I designed, programmed and machined myself. This page is the other half of it: how it was made, and what else I have built.</p>
+    <p><strong>Available from September 2027</strong>, Paris area. Final-year engineering student at ESILV (computational mechanics), in a work-study position in industrial design.</p>
+    <nav>
+      <a class="primary" href="mailto:Gabriel.ghanem@gmail.com">Email me</a>
+      <a href="#card">The card</a>
+      <a href="#work">Other work</a>
+      <a href="https://github.com/Gabrielgorithme/CNC-Business-card-">Source files</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section id="card">
+  <div class="wrap">
+    <div class="label">01 · The card</div>
+    <h2>One part, taken from model to metal</h2>
+    <p>The card is a small machining exercise with a working mechanism in it: the disc in the middle is an orthoplanar spring, three spiral legs cut into a 0.40 mm web, and it moves when you press it.</p>
+    <p>Everything written on the technical face is meant to be checked against the part in your hand: the hole, the datums, the web thickness, the scallop heights on the three test patches, the point on the fatigue curve.</p>
+    <div class="two">
+      <figure><img src="img/card-recto.jpg" alt="Front of the card: ripples machined around the spring, name below" loading="lazy" width="1400" height="917"><figcaption>Recto. The ripples are a 3D surface cut with a ball-nose end mill. Rendered from the model.</figcaption></figure>
+      <figure><img src="img/card-verso.jpg" alt="Back of the card: spring callouts, QR code, scallop comparator, fatigue curve" loading="lazy" width="1400" height="917"><figcaption>Verso. Single-line engraving with a 90° tool; capitals are 0.61 mm tall. Rendered from the model.</figcaption></figure>
+    </div>
+    <table>
+      <tr><th>Material</th><td>Aluminium 7075-T6, 2.00 mm plate, faced to 1.70 mm</td></tr>
+      <tr><th>Size</th><td>85.60 × 53.98 mm (ISO ID-1), about 19.5 g</td></tr>
+      <tr><th>Spring</th><td>Orthoplanar, three legs, 0.40 mm web centred in the thickness</td></tr>
+      <tr><th>Machine</th><td>My own desktop CNC router, refitted with a new controller and a 1.5 kW spindle</td></tr>
+      <tr><th>Setups</th><td>Two, flipped onto two locating pins</td></tr>
+      <tr><th>Tools</th><td>Five: 4 mm bull-nose, 2 mm and 1 mm end mills, 90° engraver, 3 mm ball</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="label">02 · Process</div>
+    <h2>How it is made</h2>
+    <ol class="steps">
+      <li><strong>Model.</strong> The whole card is generated from code: layout, lettering, 3D model and the curves the toolpaths follow. Change one number and everything downstream follows.</li>
+      <li><strong>Program.</strong> CAM in Fusion, two setups. Every toolpath is posted and replayed against the design geometry before it runs.</li>
+      <li><strong>Face.</strong> The plate is held with tape and glue, then surfaced so the engraving starts from a plane the machine itself cut.</li>
+      <li><strong>Machine the verso.</strong> Spring recess, holes, engraving, then the card is cut free with a small tab that carries a second locating hole.</li>
+      <li><strong>Flip.</strong> Two pins put the card back within a few hundredths of a millimetre.</li>
+      <li><strong>Machine the recto.</strong> Ripples, second recess, the three spiral slots that free the spring, engraving, chamfer, and the tab comes off.</li>
+    </ol>
+    <figure><img src="img/spring.jpg" alt="Close-up of the spring: three spiral slots around a central boss" loading="lazy" width="1200" height="800"><figcaption>The spring. Rendered from the model.</figcaption></figure>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="label">03 · Other work</div>
+    <h2>What else I have built</h2>
+    <div class="cards">
+      <article>
+        <div class="label">2023 – today · Léofly</div>
+        <h3>Experimental rockets</h3>
+        <p>Technical director for manufacturing from 2024 to 2026 in a student rocketry association flying at C'Space and EuRoC. Led the teams on the Krypton rocket, ran the CAD, CAM and machine-tool training, machined aluminium structure rings and laid up carbon structures.</p>
+      </article>
+      <article>
+        <div class="label">Personal project</div>
+        <h3>Reverse-draw crossbow</h3>
+        <p>Designed and built from scratch. 32 CNC-machined aluminium parts, third iteration after printed and carbon prototypes, with a parametric model and a simulator for the cocking mechanism.</p>
+      </article>
+      <article>
+        <div class="label">Personal project</div>
+        <h3>CNC retrofit and GGSender</h3>
+        <p>Rebuilt my CNC router around a new controller and a water-cooled 1.5 kW spindle driven over Modbus, then forked the open-source sender software to change how tool changes work and to log the controller traffic.</p>
+      </article>
+      <article>
+        <div class="label">2025 – 2027 · Work-study</div>
+        <h3>Industrial design, custom lighting</h3>
+        <p>54 high-end luminaire projects at a custom architectural lighting manufacturer, 19 of them carried alone from the client brief to the manufacturing drawings. Commissioned the company's in-house CNC mill.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="label">04 · Contact</div>
+    <h2>Get in touch</h2>
+    <p>I am looking for a manufacturing, industrialisation or methods engineering position from September 2027.</p>
+    <nav>
+      <a class="primary" href="mailto:Gabriel.ghanem@gmail.com">Gabriel.ghanem@gmail.com</a>
+      <a href="https://github.com/Gabrielgorithme">GitHub</a>
+    </nav>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">Designed, programmed and machined by the person who handed it to you.</div>
+</footer>
+
+</body>
+</html>
