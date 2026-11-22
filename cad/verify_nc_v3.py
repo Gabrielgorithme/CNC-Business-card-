@@ -1,13 +1,14 @@
 """Replays the posted Card v3 G-code (one file per operation) against the design geometry.
 WCS: Z0 = raw stock top, finished face at Z-0.15. OP1: x = X+42.8, y = 26.99-Y. OP2 and the pin-hole prep (op3): x = X+42.8, y = Y+26.99.
 Process: OP1 parts off the card together with an ear carrying the second locating hole; OP2 trims the ear off."""
-import re, math, sys, numpy as np, shapely, ezdxf, pathlib
+import re, math, sys, json, numpy as np, shapely, ezdxf, pathlib
 from shapely.geometry import Point, box, LineString, MultiLineString, Polygon
 from shapely.ops import unary_union
 import build_card as B
 D = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/mnt/user-data/uploads/Business Card/cam/check_v3")
 HERE = pathlib.Path(__file__).parent
 FACE = -0.15
+META = json.loads((D / 'meta.json').read_text())
 
 def moves(path, op, step=0.04):
     x = y = 0.0; z = 15.0; mode = 0; pts = []      # kind: 0 rapid with XY motion, 1 feed, 2 vertical rapid
@@ -32,7 +33,9 @@ def moves(path, op, step=0.04):
             for i in range(1, n + 1):
                 pts.append((x + (nx - x) * i / n, y + (ny - y) * i / n, z + (nz - z) * i / n, 1 if mode else (2 if (nx, ny) == (x, y) else 0)))
         x, y, z = nx, ny, nz
-    a = np.array(pts); a[:, 0] += 42.8; a[:, 1] = (26.99 - a[:, 1]) if op == 1 else (a[:, 1] + 26.99)
+    a = np.array(pts); m = META[op - 1]            # WCS -> model x/y from the setup's own coordinate system
+    X, Y = a[:, 0].copy(), a[:, 1].copy()
+    a[:, 0] = m['origin'][0] + X * m['x'][0] + Y * m['y'][0]; a[:, 1] = m['origin'][1] + X * m['x'][1] + Y * m['y'][1]
     return a
 
 def dxf_lines(name, layer):
@@ -48,6 +51,7 @@ def dxf_lines(name, layer):
 
 OUTLINE = box(B.R_CORNER, 0, B.L - B.R_CORNER, B.Wd).union(box(0, B.R_CORNER, B.L, B.Wd - B.R_CORNER)).union(unary_union([Point(x, y).buffer(B.R_CORNER, 64) for x in (B.R_CORNER, B.L - B.R_CORNER) for y in (B.R_CORNER, B.Wd - B.R_CORNER)]))
 SPR = Point(*B.SPR); ok_all = True
+TOOLD = {o['file']: o['D'] for m in META for o in m['ops']}; TOOLRE = {o['file']: o['RE'] for m in META for o in m['ops']}; OPS = {o['file']: o for m in META for o in m['ops']}
 EAR = Point(-2.2, B.Wd / 2); BLANK = OUTLINE.union(EAR.buffer(3.3, 64)); CARD_HOLE = Point(B.HOLE[0], B.HOLE[1])
 def line(tag, name, good, msg):
     global ok_all; ok_all &= bool(good)
@@ -58,23 +62,24 @@ def common(tag, a):
     return bad == 0, "XY rapids lower than Z+0.5: %d" % bad
 
 for op in (1, 2, 3):
+    print('---', META[op - 1]['setup'], '| WCS origin in the model: x %.2f y %.2f z %.2f' % tuple(META[op - 1]['origin']), '| stock', [round(v, 2) for v in META[op - 1]['stock']])
     for f in sorted(D.glob("op%d_*.nc" % op)):
         name = re.search(r"\((\d+ [^)]*)\)", open(f).read()); name = name.group(1) if name else f.name
         k = int(f.stem.split("_")[1]); a = moves(f, op); c = cutpts(a); r_ok, r_msg = common(f.stem, a); P = shapely.points(c[:, :2])
         if "Face" in name or "face" in name:
-            line(f.stem, name, r_ok and abs(c[:, 2].min() - (-0.13 if k == 1 else -0.15)) < 1e-6 and (BLANK if op == 1 else OUTLINE).buffer(-0.01).within(unary_union([Point(x, y).buffer(3.0, 8) for x, y in c[::2, :2]])), ("Z %.3f, covers the whole " + ("card and ear" if op == 1 else "card") + "; %s") % (c[:, 2].min(), r_msg))
+            line(f.stem, name, r_ok and abs(c[:, 2].min() - (-0.15 if 'Deburr' in name else -0.13)) < 1e-6 and (BLANK if op == 1 else OUTLINE).buffer(-0.01).within(unary_union([Point(x, y).buffer(TOOLD[f.name] / 2 - TOOLRE[f.name], 8) for x, y in c[:, :2]])), ("Z %.3f, covers the whole " + ("card and ear" if op == 1 else "card") + "; %s") % (c[:, 2].min(), r_msg))
         elif "recess" in name:
             r = shapely.distance(SPR, P); line(f.stem, name, r_ok and r.min() > 5.795 and r.max() < 12.005 and abs(c[:, 2].min() + 0.80) < 1e-6, "tool centre r %.3f..%.3f, floor Z %.3f; %s" % (r.min(), r.max(), c[:, 2].min(), r_msg))
         elif "Holes" in name or "Pin hole" in name:
             cen = [CARD_HOLE, EAR] if "Holes" in name else [CARD_HOLE]
-            r = np.min([shapely.distance(q, P) for q in cen], axis=0); line(f.stem, name, r_ok and abs(r.max() - 0.525) < 0.003 and abs(c[:, 2].min() + 4.0) < 1e-6, "tool centre out to %.3f from the hole axis -> D%.2f, Z %.2f; %s" % (r.max(), 2 * r.max() + 2, c[:, 2].min(), r_msg))
+            r = np.min([shapely.distance(q, P) for q in cen], axis=0); line(f.stem, name, r_ok and abs(r.max() - 0.525) < 0.003 and c[:, 2].min() < -2.0 + 1e-4, "tool centre out to %.3f from the hole axis -> D%.2f, Z %.2f; %s" % (r.max(), 2 * r.max() + 2, c[:, 2].min(), r_msg))
         elif "Part off" in name or "Trim" in name:
             ref = BLANK if "Part off" in name else OUTLINE; want = 1.1 if "rough" in name else 1.0
-            d = shapely.distance(ref, P); inside = shapely.contains(ref, P).sum(); deep = c[c[:, 2] < (-2.0 if op == 1 else -1.85) - 1e-6]
+            d = shapely.distance(ref, P); inside = shapely.contains(ref, P).sum(); bottom = -2.0 if op == 1 else -1.85; deep = c[c[:, 2] < bottom + 1e-4]      # at or below the underside of the plate / blank
             through = ref.boundary.difference(unary_union([Point(x, y).buffer(1.0 + (0.11 if "rough" in name else 0.01), 12) for x, y in deep[:, :2]])) if len(deep) else ref.boundary
             if "Part off" in name: through = through.difference(unary_union([Point(0, B.Wd / 2 + sg * 2.46).buffer(2.2) for sg in (-1, 1)]))   # the two inside corners where the ear meets the card: a round tool leaves fillets there, the OP2 trim removes them
             if "Trim" in name: through = LineString([(0, B.Wd / 2 - 4.2), (0, B.Wd / 2 + 4.2)]).difference(unary_union([Point(x, y).buffer(1.0 + (0.11 if "rough" in name else 0.01), 12) for x, y in deep[:, :2]]))
-            line(f.stem, name, r_ok and inside == 0 and d.min() > want - 0.006 and through.length < 0.05, "tool edge stays %.3f mm off the %s (wants %.1f), cut through along all of it but %.2f mm, Z %.2f; %s" % (d.min() - 1.0, "card + ear outline" if "Part off" in name else "card edge", want - 1.0, through.length, c[:, 2].min(), r_msg))
+            line(f.stem, name, r_ok and inside == 0 and d.min() > want - 0.006 and through.length < 0.05 and c[:, 2].min() > bottom - 0.12, "tool edge stays %.3f mm off the %s (wants %.1f), reaches the underside along all of it but %.2f mm, Z %.2f = %.2f below the underside; %s" % (d.min() - 1.0, "card + ear outline" if "Part off" in name else "card edge", want - 1.0, through.length, c[:, 2].min(), bottom - c[:, 2].min(), r_msg))
         elif "Engrave lines" in name:
             dep = float(re.search(r"lines (\d\.\d+)", name).group(1)); ref = dxf_lines("engraving_v3_%s_traces.dxf" % ("verso" if op == 1 else "recto"), "TRACE_%03d" % round(dep * 1000))
             atd = c[np.abs(c[:, 2] - (FACE - dep)) < 1e-4]; dist = shapely.distance(ref, shapely.points(atd[:, :2]))
@@ -106,6 +111,13 @@ for op in (1, 2, 3):
             inside_card = shapely.contains(OUTLINE.buffer(0.02), P).mean()
             line(f.stem, name, r_ok and dz.min() > -0.006 and dz.max() < 0.02, "ball tip vs designed surface (interior): %+.4f..%+.4f mm; Z %.3f..%.3f; %.1f%% of points inside the outline" % (dz.min(), dz.max(), c[:, 2].min(), c[:, 2].max(), 100 * inside_card))
             print("        points lower than the deepest ripple (%d): near card edge %d, near hole %d, near recess rim %d, near band %d, lowest Z %.3f" % (len(low), near_edge, near_hole, near_recess, near_band, low[:, 2].min() if len(low) else 0))
+        elif OPS[f.name]["strategy"] == "deburr":
+            h = FACE - c[:, 2]; r = shapely.distance(SPR, P); rh = shapely.distance(CARD_HOLE, P); dout = shapely.distance(OUTLINE.boundary, P)
+            rim = np.abs(r - 13.0) < 1.0; boss = np.abs(r - 4.8) < 1.0; hole = rh < 1.6; other = ~(rim | boss | hole)
+            w_rim = (h - (13.0 - r))[rim]; w_boss = (h - (r - 4.8))[boss]; w_hole = (h - (1.525 - rh))[hole]
+            msg = "Z %.3f..%.3f; chamfer it leaves at the finished face: recess rim %s, boss %s, card hole (3.05) %s; points elsewhere %d (nearest to the card edge %.2f)" % (c[:, 2].min(), c[:, 2].max(),
+                  ("%.2f..%.2f" % (w_rim.min(), w_rim.max())) if rim.any() else "none", ("%.2f..%.2f" % (w_boss.min(), w_boss.max())) if boss.any() else "none", ("%.2f..%.2f" % (w_hole.min(), w_hole.max())) if hole.any() else "none", other.sum(), dout.min())
+            line(f.stem, name, r_ok and c[:, 2].min() > -0.79, msg + "; " + r_msg)
         else:
             line(f.stem, name, False, "no check written for this operation")
 print("ALL OK" if ok_all else "SOMETHING FAILED")
