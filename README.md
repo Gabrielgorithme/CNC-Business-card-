@@ -2,7 +2,7 @@
 
 A CNC-milled aluminium business card with a working orthoplanar spring, designed and machined by Gabriel Ghanem.
 
-The card is a PLM demo in the hand: part number, revision, serial, and a QR code that opens the portfolio page in `docs/` (how the card was made, other work, contact).
+The card is a PLM demo in the hand: part number, revision, and a QR code that opens the portfolio page in `docs/` (how the card was made, other work, contact).
 
 ## Spec (rev A, draft)
 
@@ -132,7 +132,11 @@ The tables above describe the committed `cam/Card_v3.f3d`. The CAM on the machin
 
 The design now matches the 3.05 hole the CAM cuts. Against the committed CAM, the verso engraving changed in two places (the hole callout and the caption under the QR code), so `engraving_v3_verso_traces.dxf` has to be re-imported and the verso single-line engraving regenerated. The recto inputs are unchanged.
 
-`cad/verify_nc_v3.py` replays the G-code posted for each operation against the design geometry; all 25 operations pass.
+The current CAM is the Fusion document "Card v4": a copy of "Card v3" with the 3.05 hole on the body and the new verso engraving, all other operations unchanged. `cad/verify_nc_v4.py` replays its G-code against the design with the process as run (facing straight to Z-0.15 with a spring pass at the end of each setup, holes and part-off stopping at the underside, slots to 0.20 above the underside); it reads each setup's Z origin from `meta.json`.
+
+The verso no longer carries a serial ("03 / 12" was removed), so every card of a batch has the same engraving.
+
+`cad/verify_nc_v3.py` replays the G-code posted for each operation of the committed "Card v3" archive against the design geometry; all 25 operations pass.
 
 - `cam/Card_v3.f3d`: the Fusion document with both setups and all toolpaths (File > Open in Fusion).
 - `cam/gcode_check_v3/`: one G-code file per operation, posted with a grbl post for the check above. They are check files, not a program to run: re-post from Fusion for the machine.
