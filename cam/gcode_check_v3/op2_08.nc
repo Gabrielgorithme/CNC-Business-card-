@@ -6,7 +6,7 @@ N20 G21
 N25 G28 G91 Z0
 N30 G90
 
-(8 Engrave lines 0.200 deep - T43)
+(8 Engrave lines 0.200 deep - T43 recto)
 N35 T43 M6
 N40 S24000 M3
 N45 G17 G90 G94

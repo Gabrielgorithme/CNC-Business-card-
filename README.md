@@ -78,23 +78,26 @@ Mass 19.5 g in 7075 (computed). The flexure sizing only depends on the 0.40 mm w
 
 Inputs from `cad/export_cam_inputs.py`, all in model coordinates: `card_v3_body.step`, `engraving_v3_{verso,recto}_traces.dxf` (one layer per depth), `engraving_v3_verso_fills.dxf`, `cam_v3_helpers.dxf`. `cam/fusion_lib.py` holds the helpers used to build the operations through the Fusion API.
 
-Process: tape and CA glue, face 0.13, machine and engrave, face a further 0.02 to deburr, flip about the long axis, repeat, part off in OP2.
+Process: tape and CA glue, face 0.13, machine and engrave, face a further 0.02 to deburr, part off in OP1, flip about the long axis onto two pins, repeat on the recto, trim the ear off.
 
-Both setups: Z0 on the raw stock top, origin at the card centre, X along the long edge, finished face at Z-0.15. Stock 109.6 x 78 x 2.00. Two 3 mm reference holes at X = -50 and +50, Y = 0 are drilled in OP1 to locate OP2.
+All setups: origin at the card centre, X along the long edge. OP1 and OP2: Z0 on the raw top of the plate, finished face at Z-0.15.
 
-| OP1 - Verso (25 min) | Tool | Z |
+Locating the flip: two 3.05 mm holes, the card's own hole and one in an "ear" left attached to the card when it is parted off in OP1 (a 3.3 mm radius tab centred 2.2 mm outside the short edge, on the long axis). OP1 drills both 4 mm deep, so they continue into the spoilboard. The ear hole is on the flip axis and its spoilboard hole is reused; the card hole lands at a mirrored position, so the "OP2 prep" setup drills that one pin hole in the spoilboard (Z0 on the spoilboard top, run on the bare spoilboard). The pins come out once the blank is glued.
+
+| OP1 - Verso (28 min) | Tool | Z |
 |---|---|---|
-| 1 Face | T60 | -0.13 |
+| 1 Face, card and ear | T60 | -0.13 |
 | 2 Spring recess | T20 | -0.80 |
-| 3 Card hole and two reference holes, through | T20 | -2.10 |
-| 4 Outline groove, 0.1 left on the wall | T20 | -0.85 |
+| 3 Card hole and ear hole, 3.05 | T20 | -4.00 |
 | 5-7 Single-line engraving | T43 | -0.20, -0.225, -0.25 |
 | 8 V-carve fills | T43 | to -1.20 |
 | 9 Scallop comparator | T31 | -0.19 |
 | 10 Deburr face | T60 | -0.15 |
 | 11 Chamfer 0.15 | T43 | tip at -0.40 |
+| 12 Part off card + ear, rough, 0.1 left on the wall | T20 | -2.08 |
+| 13 Part off card + ear, one full-depth finishing pass | T20 | -2.08 |
 
-| OP2 - Recto (44 min) | Tool | Z |
+| OP2 - Recto (41 min) | Tool | Z |
 |---|---|---|
 | 1 Face | T60 | -0.13 |
 | 2 Ripples, 0.1 stepover | T31 | to -0.29 |
@@ -103,9 +106,12 @@ Both setups: Z0 on the raw stock top, origin at the card centre, X along the lon
 | 5-8 Single-line engraving | T43 | -0.20 to -0.35 |
 | 9 Deburr face | T60 | -0.15 |
 | 10 Chamfer 0.15 | T43 | tip at -0.40 |
-| 11 Part off | T20 | -1.93 |
+| 11 Trim the ear off, rough | T20 | -1.93 |
+| 12 Trim the ear off, one finishing pass | T20 | -1.93 |
 
-`cad/verify_nc_v3.py` replays the G-code posted for each operation against the design geometry; all 22 operations pass.
+The card edge is finished in OP1 except for about 8 mm at the ear, which OP2 cuts. The design still says "3 H7" for the card hole; only the CAM uses 3.05 so far.
+
+`cad/verify_nc_v3.py` replays the G-code posted for each operation against the design geometry; all 25 operations pass.
 
 - `cam/Card_v3.f3d`: the Fusion document with both setups and all toolpaths (File > Open in Fusion).
 - `cam/gcode_check_v3/`: one G-code file per operation, posted with a grbl post for the check above. They are check files, not a program to run: re-post from Fusion for the machine.

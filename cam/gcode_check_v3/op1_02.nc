@@ -6,7 +6,7 @@ N20 G21
 N25 G28 G91 Z0
 N30 G90
 
-(2 Spring recess to -0.80 - T20)
+(2 Spring recess to -0.80 - T20 verso)
 N35 T20 M6
 N40 S24000 M3
 N45 G17 G90 G94

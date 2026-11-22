@@ -6,7 +6,7 @@ N20 G21
 N25 G28 G91 Z0
 N30 G90
 
-(8 V-carve fills QR, arrows - T43)
+(8 V-carve fills QR, arrows - T43 verso)
 N35 T43 M6
 N40 S24000 M3
 N45 G17 G90 G94

@@ -6,7 +6,7 @@ N20 G21
 N25 G28 G91 Z0
 N30 G90
 
-(11 Chamfer verso edge 0.15 - T43)
+(11 Chamfer verso edge 0.15 - T43 verso)
 N35 T43 M6
 N40 S24000 M3
 N45 G17 G90 G94

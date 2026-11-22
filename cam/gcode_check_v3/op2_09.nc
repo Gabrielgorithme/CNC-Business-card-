@@ -6,7 +6,7 @@ N20 G21
 N25 G28 G91 Z0
 N30 G90
 
-(9 Deburr face to -0.15 - T60)
+(9 Deburr face to -0.15 - T60 recto)
 N35 T60 M6
 N40 S24000 M3
 N45 G17 G90 G94

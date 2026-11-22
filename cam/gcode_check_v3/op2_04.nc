@@ -6,7 +6,7 @@ N20 G21
 N25 G28 G91 Z0
 N30 G90
 
-(4 Spiral slots through the web - T10)
+(4 Spiral slots through the web - T10 recto)
 N35 T10 M6
 N40 S24000 M3
 N45 G17 G90 G94
