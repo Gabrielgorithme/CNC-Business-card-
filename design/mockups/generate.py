@@ -1,5 +1,5 @@
 """Generates the concept mockups (SVG, 10 units = 1 mm). Card: ISO ID-1, 85.6 x 53.98 x 2 mm."""
-import math, segno, pathlib
+import math, os, segno, pathlib
 OUT = pathlib.Path(__file__).parent
 W, H, R = 856, 540, 32
 URL = "https://gabrielgorithme.github.io/CNC-Business-card-/"   # placeholder target, to be shortened
@@ -67,7 +67,7 @@ def card(body, extra_defs=""):
 </svg>'''
 
 TAG1, TAG2 = "DESIGNED, PROGRAMMED AND MACHINED", "BY THE PERSON WHO HANDED IT TO YOU."
-PHONE, MAIL = "+33 6 60 45 50 18", "EMAIL — TO CONFIRM"
+PHONE, MAIL = os.environ.get("CARD_PHONE", ""), "EMAIL — TO CONFIRM"   # phone kept out of the public repo
 
 # ---------- A : the card is its own engineering drawing ----------
 def a_front():
@@ -113,7 +113,7 @@ def a_back():
     b.append(text(70, 350, "SHEET 2 / 2 — DIGITAL TWIN", 13, 700))
     b.append(text(70, 372, "CAD MODEL · TOOLPATHS · MACHINING VIDEO", 11))
     b.append(text(70, 430, TAG1, 15, 600, ls=2)); b.append(text(70, 452, TAG2, 15, 600, ls=2))
-    b.append(text(70, 496, PHONE + "   ·   " + MAIL, 13))
+    b.append(text(70, 496, (PHONE + "   ·   " if PHONE else "") + MAIL, 13))
     for i in range(0, 81):  # mm ruler along bottom edge
         h = 16 if i % 10 == 0 else 11 if i % 5 == 0 else 6
         b.append(f'<path d="M{28+i*10},{H} v{-h}" stroke="{ENG}" stroke-width="1"/>')
@@ -144,7 +144,7 @@ def b_back():
     b.append(f'<rect x="520" y="60" width="290" height="290" rx="14" fill="url(#alu)" stroke="{ENG2}" stroke-width="1.2"/>')
     q, n = qr(545, 85, 240); b.append(q)
     b.append(text(48, 440, TAG1, 16, 600, ls=2.4)); b.append(text(48, 464, TAG2, 16, 600, ls=2.4))
-    b.append(text(48, 506, PHONE + "   ·   " + MAIL + "   ·   AVAILABLE SEPT. 2027", 12.5))
+    b.append(text(48, 506, (PHONE + "   ·   " if PHONE else "") + MAIL + "   ·   AVAILABLE SEPT. 2027", 12.5))
     b.append(text(W-48, 506, "03 / 12", 13, 700, anchor="end"))
     return card("\n".join(b))
 
@@ -185,7 +185,7 @@ def c_back():
     b.append(text(308, 174, "PROGRAMMED", 17, 700, ls=3)); b.append(text(308, 198, "AND MACHINED", 17, 700, ls=3))
     b.append(text(308, 300, "BY THE PERSON", 13, ls=2.4)); b.append(text(308, 319, "WHO HANDED", 13, ls=2.4)); b.append(text(308, 338, "IT TO YOU.", 13, ls=2.4))
     b.append(f'<path d="M48,478 H{W-48}" stroke="{ENG}" stroke-width="1.4"/>')
-    b.append(text(48, 506, PHONE + "   ·   " + MAIL, 13))
+    b.append(text(48, 506, (PHONE + "   ·   " if PHONE else "") + MAIL, 13))
     b.append(text(W-48, 506, "AVAILABLE SEPT. 2027   ·   03 / 12", 13, 700, anchor="end"))
     b.append(text(48, 66, "GABRIEL GHANEM", 40, 700, ls=5))
     b.append(f'<path d="M48,90 H{W-48}" stroke="{ENG}" stroke-width="1.4"/>')

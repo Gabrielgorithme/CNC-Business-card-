@@ -2,3 +2,4 @@ __pycache__/
 cad/card_v2_engraved.step
 cad/card_v3_engraved.step
 design/v3/isocp_fusion_strokes.json
+site/out/

@@ -1,7 +1,7 @@
 """Card v3: ripple face (recto) + dense technical face (verso), ISOCP single-line lettering.
 10 SVG units = 1 mm. The ripple is a real height field (mm), shaded with numpy; the same
 function can later be exported as the 3D-contouring surface for CAM."""
-import math, base64, io, pathlib, sys
+import math, base64, io, os, pathlib, sys
 import numpy as np, segno
 import lettering as LT
 from PIL import Image
@@ -9,6 +9,7 @@ OUT = pathlib.Path(__file__).parent
 W, H, R = 856, 540, 32
 CARD_W, CARD_H = 85.6, 53.98
 URL = "https://gabrielgorithme.github.io/CNC-Business-card-/"   # placeholder
+PHONE = os.environ.get("CARD_PHONE", "")   # set it when generating the engraving; kept out of the public repo
 ENG, ENG2, CUT = "#3f454c", "#6f767f", "#0f1113"
 SANS = "font-family=\"'DejaVu Sans Condensed','DIN Alternate','Bahnschrift','Roboto Condensed',Arial,sans-serif\""
 MONO = "font-family=\"'DejaVu Sans Mono','Menlo','Consolas',monospace\""
@@ -223,7 +224,8 @@ def back():
     tx = 584
     b.append(T(tx, 384, "DESIGNED, PROGRAMMED", 12.5, 700, ls=1)); b.append(T(tx, 404, "AND MACHINED BY THE PERSON", 12.5, 700, ls=1)); b.append(T(tx, 424, "WHO HANDED IT TO YOU.", 12.5, 700, ls=1))
     b.append(P(f"M{tx},437 H{W-40}", 1))
-    b.append(T(tx, 456, "+33 6 60 45 50 18", 12.5, 600, ls=1.4)); b.append(T(tx, 473, "GABRIEL.GHANEM@GMAIL.COM", 12, 600, ls=1))
+    if PHONE: b.append(T(tx, 456, PHONE, 12.5, 600, ls=1.4))
+    b.append(T(tx, 473, "GABRIEL.GHANEM@GMAIL.COM", 12, 600, ls=1))
     b.append(T(tx, 496, "AVAILABLE SEPT. 2027", 12.5, 700, ls=1.4)); b.append(T(W-40, 496, "03 / 12", 12.5, 700, "end", ls=1.4))
     # --- rocket easter egg + micro text
     b.append(f'<g transform="translate(78,332) rotate(-90) scale(.8)">' + P("M230,0 c-14,-9 -30,-13 -46,-13 h-150 l-18,-12 v12 h-8 v26 h8 v12 l18,-12 h150 c16,0 32,-4 46,-13 z M184,-13 v26 M34,-13 v26", 1.1)
