@@ -1,0 +1,225 @@
+{
+ "cubesat-section": {
+  "w": 976,
+  "h": 945,
+  "widths": [
+   640,
+   976
+  ]
+ },
+ "cubesat-final": {
+  "w": 953,
+  "h": 945,
+  "widths": [
+   480,
+   953
+  ]
+ },
+ "cubesat-pcbs": {
+  "w": 532,
+  "h": 945,
+  "widths": [
+   400,
+   532
+  ]
+ },
+ "cubesat-spring": {
+  "w": 709,
+  "h": 715,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "cubesat-proto": {
+  "w": 926,
+  "h": 945,
+  "widths": [
+   480,
+   926
+  ]
+ },
+ "cubesat-tank": {
+  "w": 532,
+  "h": 945,
+  "widths": [
+   400,
+   532
+  ]
+ },
+ "cubesat-talk": {
+  "w": 1200,
+  "h": 800,
+  "widths": [
+   640,
+   1200
+  ]
+ },
+ "stard-tank": {
+  "w": 709,
+  "h": 945,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "stard-module": {
+  "w": 709,
+  "h": 795,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "crossbow-cad": {
+  "w": 490,
+  "h": 841,
+  "widths": [
+   490
+  ]
+ },
+ "crossbow-proto": {
+  "w": 490,
+  "h": 841,
+  "widths": [
+   490
+  ]
+ },
+ "crossbow-cam": {
+  "w": 709,
+  "h": 885,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "crossbow-top": {
+  "w": 709,
+  "h": 530,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "crossbow-lever": {
+  "w": 709,
+  "h": 825,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "hook-deployed": {
+  "w": 960,
+  "h": 1246,
+  "widths": [
+   480,
+   960
+  ]
+ },
+ "hook-folded": {
+  "w": 960,
+  "h": 1044,
+  "widths": [
+   480,
+   960
+  ]
+ },
+ "hook-cnc-manual": {
+  "w": 955,
+  "h": 945,
+  "widths": [
+   480,
+   955
+  ]
+ },
+ "hook-lathe": {
+  "w": 1260,
+  "h": 945,
+  "widths": [
+   640,
+   1260
+  ]
+ },
+ "hook-arm": {
+  "w": 709,
+  "h": 945,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "mudguard-scan": {
+  "w": 720,
+  "h": 831,
+  "widths": [
+   480,
+   720
+  ]
+ },
+ "mudguard-layup": {
+  "w": 532,
+  "h": 945,
+  "widths": [
+   400,
+   532
+  ]
+ },
+ "mudguard-fitted": {
+  "w": 994,
+  "h": 745,
+  "widths": [
+   480,
+   994
+  ]
+ },
+ "cnc-machine": {
+  "w": 1400,
+  "h": 1573,
+  "widths": [
+   480,
+   960,
+   1400
+  ]
+ },
+ "portrait": {
+  "w": 840,
+  "h": 1330,
+  "widths": [
+   420,
+   840
+  ]
+ },
+ "leofly-stand": {
+  "w": 709,
+  "h": 945,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "ambiance-4axis": {
+  "w": 709,
+  "h": 945,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "ambiance-rig": {
+  "w": 709,
+  "h": 945,
+  "widths": [
+   480,
+   709
+  ]
+ },
+ "ambiance-cfd": {
+  "w": 1368,
+  "h": 475,
+  "widths": [
+   640,
+   1368
+  ]
+ }
+}

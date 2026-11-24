@@ -33,7 +33,8 @@ The card is a PLM demo in the hand: part number, revision, serial, and a QR code
 | `analysis/` | Flexure sizing |
 | `cad/` | CAD exports (STEP, DXF) |
 | `cam/` | Toolpaths, setup sheets, feeds and speeds |
-| `docs/` | The page the QR code opens |
+| `docs/` | The site the QR code opens (GitHub Pages, served from `main` /docs) |
+| `site/` | Build scripts for the site: pages, images, lettering, CVs (not published) |
 | `media/` | Photos and videos of the machining |
 
 ## Design (v3)
@@ -139,3 +140,11 @@ Note: the ripple field sits 0.02 mm below the raw recto face so the crests are m
 ## Earlier concepts (v1)
 
 Three first directions are kept in `design/mockups/`: A drawing sheet, B ripple, C digital thread.
+
+## The site (docs/)
+
+Plain static HTML, CSS and a little JavaScript, no framework. English at the root, French in `fr/`.
+
+- Headings are drawn with the card's own ISOCP strokes. `docs/assets/data/isocp-card.json` holds 61 glyphs read back out of `design/v3/*_artwork.svg`: re-running `generate.py` with a stub `lettering` module records which string produced each text path, and each glyph's stroke count follows from the 71 strings on the card plus the rule that letters never overlap. The recovered cap height is 8.774 for Fusion's 8.775.
+- The card section replays `cam/gcode_check_v3/op1_05` to `op1_09` (the verso engraving), with the phone-number strokes removed.
+- `python3 site/build.py` writes `docs/index.html`, `docs/fr/index.html` and `docs/404.html`. `python3 site/images.py <photos> <uploads>` exports the WebP images (source photos stay out of the repo). `python3 site/cv.py && node site/print-cv.js` makes the CV PDFs.
