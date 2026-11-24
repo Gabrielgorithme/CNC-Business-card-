@@ -149,6 +149,14 @@
    709
   ]
  },
+ "hook-fea": {
+  "w": 1200,
+  "h": 627,
+  "widths": [
+   640,
+   1200
+  ]
+ },
  "mudguard-scan": {
   "w": 720,
   "h": 831,
@@ -196,6 +204,30 @@
   "widths": [
    480,
    709
+  ]
+ },
+ "ambiance-showcase": {
+  "w": 960,
+  "h": 1005,
+  "widths": [
+   480,
+   960
+  ]
+ },
+ "ambiance-notredame": {
+  "w": 960,
+  "h": 1383,
+  "widths": [
+   480,
+   960
+  ]
+ },
+ "ambiance-belfry": {
+  "w": 960,
+  "h": 1387,
+  "widths": [
+   480,
+   960
   ]
  },
  "ambiance-4axis": {
