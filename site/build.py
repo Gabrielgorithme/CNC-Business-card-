@@ -4,13 +4,18 @@
 
 Headings are drawn at build time with the card's ISOCP strokes (site/isocp.py), so the published pages are plain
 HTML with inline SVG: no framework, no runtime dependency for the lettering."""
-import html, json, pathlib, re
+import hashlib, html, json, pathlib, re
 import isocp
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 URL = "https://gabrielgorithme.github.io/CNC-Business-card-/"
 SIZES = json.loads((DOCS / "assets/img/sizes.json").read_text())
+
+
+def ver(rel):
+    """Content fingerprint for cache busting: browsers keep CSS and JS for a while, so a change must change the URL."""
+    return hashlib.sha1((DOCS / rel).read_bytes()).hexdigest()[:8]
 EMAIL = "gabriel.ghanem@gmail.com"
 LINKEDIN = "https://www.linkedin.com/in/gabriel-ghanem-02528a208"
 GGSENDER = "https://github.com/Gabrielgorithme/GGSender"
@@ -369,7 +374,7 @@ def head(c, canonical, robots=""):
 <link rel="icon" href="{p}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{p}assets/apple-touch-icon.png">
 <link rel="preload" href="{p}assets/fonts/atkinson-next.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{p}assets/css/site.css">
+<link rel="stylesheet" href="{p}assets/css/site.css?v={ver("assets/css/site.css")}">
 </head>"""
 
 
@@ -395,7 +400,7 @@ def page(c):
   <div class="bar"><span class="lbl">{L("GG-2027-001  REV C", weight=1/10, label=c['part'])}</span><a href="{c['other']}" hreflang="{c['other_lang']}" lang="{c['other_lang']}">{c['other_label']}</a></div>
   <h1 class="name">{L("GABRIEL|GHANEM", weight=1/15, track=1.6, lead=1.42, label="Gabriel Ghanem")}</h1>
   <div class="intro">
-    <figure class="me">{img("portrait", c['me_alt'], "(min-width: 1000px) 34vw, 40vw", eager=True, prefix=p)}</figure>
+    <figure class="me">{img("portrait", c['me_alt'], "(min-width: 1000px) 34vw, 34vw", eager=True, prefix=p)}</figure>
     <p class="lead">{c['lead']}</p>
   </div>
   <p class="avail">{c['avail']}</p>
@@ -504,7 +509,7 @@ def page(c):
 </main>
 
 <footer><div class="wrap"><p class="colo">{c['colophon']}</p><p>Gabriel Ghanem, 2026</p></div></footer>
-<script src="{p}assets/js/site.js" defer></script>
+<script src="{p}assets/js/site.js?v={ver("assets/js/site.js")}" defer></script>
 </body>
 </html>
 """
@@ -522,7 +527,7 @@ def not_found():
 <title>{c['nf_title']}: Gabriel Ghanem</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="{base}favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="{base}assets/css/site.css">
+<link rel="stylesheet" href="{base}assets/css/site.css?v={ver("assets/css/site.css")}">
 </head>
 <body>
 <main class="wrap hero" style="min-height:70vh;align-content:center">
