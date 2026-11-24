@@ -37,6 +37,12 @@ def fig(name, alt, cap=None, sizes="100vw", prefix="", cls=""):
     return f"<figure{k}>{img(name, alt, sizes, prefix=prefix)}{c}</figure>"
 
 
+def row_sizes(name, row=300):
+    """Strip photos are laid out by height, so their rendered width follows their aspect ratio."""
+    m = SIZES[name]
+    return f"{round(row * m['w'] / m['h'])}px"
+
+
 def fr_typo(s):
     """French spacing: narrow no-break space before ; : ! ? and inside guillemets (text only, not tags or URLs)."""
     parts = re.split(r"(<[^>]+>)", s)
@@ -136,7 +142,8 @@ T = {
              ("hook-folded", "The hook with its arms folded along the shaft.", "Arms folded.")),
     hk_more=(("hook-cnc-manual", "The CNC version in front of the earlier manual version.", "CNC version in front, manual version behind."),
              ("hook-lathe", "The shaft being turned on a CNC lathe, supported by the tailstock.", "Turning the shaft."),
-             ("hook-arm", "An arm half-machined in its aluminium plate.", "An arm, half-machined in its plate.")),
+             ("hook-arm", "An arm half-machined in its aluminium plate.", "An arm, half-machined in its plate."),
+             ("hook-fea", "Ansys static structural study of one arm, coloured by safety factor.", "Static study of an arm in Ansys.")),
 
     mg_h="CARBON MUDGUARD", mg_label="Carbon mudguard",
     mg_body="For my 1,500 W electric bike: I scanned the bike with a phone app, designed the mudguard on the scan, printed the mould in four sections and laid up the carbon by hand.",
@@ -159,9 +166,13 @@ T = {
          ["A maker of custom architectural lighting, from prototype to small series.",
           "54 high-end luminaire projects, 19 of them carried alone from the client's brief to the manufacturing drawings. Among them, a façade luminaire made 300 times with suppliers in France and Asia, and a luminaire for a luxury fashion house's 2025 Christmas campaign.",
           "Commissioned the company's CNC mill and machined its first parts.",
-          "In-house tooling: one rig sets the distance between a lens and its LED with a twist of its top part, and reads it off engraved graduations.",
+          "Luminaires for Notre-Dame de Paris during its restoration.",
+          "I design custom tooling and measuring equipment for the workshop. One rig sets the distance between a lens and its LED with a twist of its top part, and reads it off engraved graduations.",
           "Thermal simulation, optical measurements, supplier follow-up."],
-         (("ambiance-rig", "Printed rig holding a flexible LED strip under magenta light.", "The lens-distance rig."),
+         (("ambiance-notredame", "Oak spiral staircase under the medieval timber frame of a Notre-Dame tower, lit by linear luminaires in the handrail and along the beams.", "Notre-Dame de Paris, restored: lighting in the towers."),
+          ("ambiance-belfry", "A bronze bell in its timber belfry at Notre-Dame, lit from below the beams.", "Notre-Dame de Paris: the belfry."),
+          ("ambiance-showcase", "Shop-window display for a luxury fashion house: a topiary butterfly studded with points of light, a bag at its centre.", "A window display for a luxury fashion house."),
+          ("ambiance-rig", "Printed rig holding a flexible LED strip under magenta light.", "A measuring rig: lens-to-LED distance."),
           ("ambiance-4axis", "A block being machined on a 4-axis mill with a rotary axis.", "4-axis machining."),
           ("ambiance-cfd", "Convection streamlines around two heatsink designs: straight fins and concentric rings.", "Convection study of two heatsink designs."))),
         ("Léofly, ESILV's experimental rocketry club", "2023 - TODAY", "Rockets and payloads for the C'Space (CNES) and EuRoC campaigns",
@@ -274,7 +285,8 @@ T["fr"].update(
              ("hook-folded", "Le grappin, bras repliés le long du fût.", "Bras repliés.")),
     hk_more=(("hook-cnc-manual", "La version CNC devant l'ancienne version faite en conventionnel.", "Version CNC devant, version conventionnelle derrière."),
              ("hook-lathe", "Le fût en cours de tournage sur un tour CNC, soutenu par la contre-pointe.", "Tournage du fût."),
-             ("hook-arm", "Un bras à moitié usiné dans sa plaque d'aluminium.", "Un bras, à moitié usiné dans sa plaque.")),
+             ("hook-arm", "Un bras à moitié usiné dans sa plaque d'aluminium.", "Un bras, à moitié usiné dans sa plaque."),
+             ("hook-fea", "Étude statique Ansys d'un bras, colorée selon le coefficient de sécurité.", "Étude statique d'un bras sous Ansys.")),
 
     mg_h="GARDE-BOUE EN CARBONE", mg_label="Garde-boue en carbone",
     mg_body="Pour mon vélo électrique de 1 500 W : j'ai scanné le vélo avec une application sur téléphone, dessiné le garde-boue sur le scan, imprimé le moule en quatre sections et stratifié le carbone au contact.",
@@ -297,9 +309,13 @@ T["fr"].update(
          ["Fabricant de luminaires architecturaux sur mesure, du prototype à la petite série.",
           "54 projets de luminaires haut de gamme, dont 19 menés seul, du cahier des charges client aux plans de fabrication. Parmi eux, un luminaire de façade produit à 300 exemplaires avec des fournisseurs en France et en Asie, et un luminaire pour la campagne de Noël 2025 d'une maison de mode de luxe.",
           "Mise en service de la fraiseuse CNC de l'entreprise et usinage de ses premières pièces.",
-          "Outillage interne : un banc règle la distance entre une lentille et sa LED en tournant sa partie haute, et l'affiche sur des graduations gravées.",
+          "Luminaires pour Notre-Dame de Paris pendant sa restauration.",
+          "Je conçois des outillages et des équipements de mesure sur mesure pour l'atelier. Un banc règle la distance entre une lentille et sa LED en tournant sa partie haute, et l'affiche sur des graduations gravées.",
           "Simulation thermique, mesures optiques, suivi des fournisseurs."],
-         (("ambiance-rig", "Banc imprimé tenant un ruban LED flexible sous une lumière magenta.", "Le banc de réglage de la distance lentille-LED."),
+         (("ambiance-notredame", "Escalier hélicoïdal en chêne sous la charpente médiévale d'une tour de Notre-Dame, éclairé par des luminaires linéaires dans la main courante et le long des poutres.", "Notre-Dame de Paris restaurée : l'éclairage des tours."),
+          ("ambiance-belfry", "Une cloche en bronze dans son beffroi en bois à Notre-Dame, éclairée sous les poutres.", "Notre-Dame de Paris : le beffroi."),
+          ("ambiance-showcase", "Vitrine pour une maison de mode de luxe : un papillon en topiaire constellé de points lumineux, un sac en son centre.", "Une vitrine pour une maison de mode de luxe."),
+          ("ambiance-rig", "Banc imprimé tenant un ruban LED flexible sous une lumière magenta.", "Un banc de mesure : distance lentille-LED."),
           ("ambiance-4axis", "Un bloc usiné sur une fraiseuse 4 axes avec axe rotatif.", "Usinage 4 axes."),
           ("ambiance-cfd", "Lignes de courant de convection autour de deux dissipateurs : ailettes droites et anneaux concentriques.", "Étude de convection de deux dissipateurs."))),
         ("Léofly, l'association de fusées expérimentales de l'ESILV", "2023 - AUJOURD'HUI", "Fusées et charges utiles pour les campagnes C'Space (CNES) et EuRoC",
@@ -357,12 +373,12 @@ def head(c, canonical, robots=""):
 
 def page(c):
     p = c["prefix"]
-    S = lambda n, a, cap=None, sizes="(min-width: 760px) 33vw, 62vw": fig(n, a, cap, sizes, prefix=p)
+    S = lambda n, a, cap=None: fig(n, a, cap, row_sizes(n), prefix=p)
     call = c["cs_call"]
     tb = "".join(f'<div><dt>{k}</dt><dd>{L(v, weight=1/11)}<span class="u">{u}</span></dd></div>' for k, v, u in c["tb"])
     xp = []
     for name_, when, role, items, imgs in c["xp"]:
-        pics = "".join(f'<figure class="{"portrait" if n == "portrait" else ""}">{img(n, a, "(min-width: 1000px) 30vw, 90vw", prefix=p)}{f"<figcaption>{cp}</figcaption>" if cp else ""}</figure>' for n, a, cp in imgs)
+        pics = "".join(f'<figure class="{"portrait" if n == "portrait" else ""}">{img(n, a, row_sizes(n) if len(imgs) > 1 else "(min-width: 1000px) 30vw, 90vw", prefix=p)}{f"<figcaption>{cp}</figcaption>" if cp else ""}</figure>' for n, a, cp in imgs)
         strip = f'<div class="strip" tabindex="0" role="group" aria-label="Photos">{pics}</div>' if len(imgs) > 1 else pics
         xp.append(f"""<article>
 <span class="when">{L(when, weight=1/10)}</span>
@@ -444,7 +460,7 @@ def page(c):
 <section class="wrap minor" id="mudguard" aria-labelledby="h-mudguard">
   <div class="head"><h2 id="h-mudguard">{L(c['mg_h'], track=0.5, label=c['mg_label'])}</h2></div>
   <p class="summary">{c['mg_body']}</p>
-  <div class="thumbs">{''.join(img(n, a, "(min-width: 1000px) 25vw, 31vw", prefix=p) for n, a in c['mg_imgs'])}</div>
+  <div class="thumbs" tabindex="0" role="group" aria-label="Photos">{''.join(img(n, a, row_sizes(n, 240), prefix=p) for n, a in c['mg_imgs'])}</div>
 </section>
 
 <section class="wrap minor split" id="cnc" aria-labelledby="h-cnc">
