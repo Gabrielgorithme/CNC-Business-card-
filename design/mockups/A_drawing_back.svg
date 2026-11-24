@@ -561,7 +561,7 @@
 <text x="70" y="372" font-family="'DIN Alternate','Bahnschrift','Roboto Condensed','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" text-anchor="start" fill="#4d535b" letter-spacing="1.5">CAD MODEL · TOOLPATHS · MACHINING VIDEO</text>
 <text x="70" y="430" font-family="'DIN Alternate','Bahnschrift','Roboto Condensed','Helvetica Neue',Arial,sans-serif" font-size="15" font-weight="600" text-anchor="start" fill="#4d535b" letter-spacing="2">DESIGNED, PROGRAMMED AND MACHINED</text>
 <text x="70" y="452" font-family="'DIN Alternate','Bahnschrift','Roboto Condensed','Helvetica Neue',Arial,sans-serif" font-size="15" font-weight="600" text-anchor="start" fill="#4d535b" letter-spacing="2">BY THE PERSON WHO HANDED IT TO YOU.</text>
-<text x="70" y="496" font-family="'DIN Alternate','Bahnschrift','Roboto Condensed','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="500" text-anchor="start" fill="#4d535b" letter-spacing="1.5">+33 6 60 45 50 18   ·   EMAIL — TO CONFIRM</text>
+<text x="70" y="496" font-family="'DIN Alternate','Bahnschrift','Roboto Condensed','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="500" text-anchor="start" fill="#4d535b" letter-spacing="1.5">EMAIL — TO CONFIRM</text>
 <path d="M28,540 v-16" stroke="#4d535b" stroke-width="1"/>
 <path d="M38,540 v-6" stroke="#4d535b" stroke-width="1"/>
 <path d="M48,540 v-6" stroke="#4d535b" stroke-width="1"/>
