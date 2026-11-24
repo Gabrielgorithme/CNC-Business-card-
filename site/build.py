@@ -11,7 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 URL = "https://gabrielgorithme.github.io/CNC-Business-card-/"
 SIZES = json.loads((DOCS / "assets/img/sizes.json").read_text())
-EMAIL = "Gabriel.ghanem@gmail.com"
+EMAIL = "gabriel.ghanem@gmail.com"
 LINKEDIN = "https://www.linkedin.com/in/gabriel-ghanem-02528a208"
 GGSENDER = "https://github.com/Gabrielgorithme/GGSender"
 
@@ -59,9 +59,9 @@ T = {
 "en": dict(
     lang="en", other="fr/", other_label="Français", other_lang="fr", prefix="",
     title="Gabriel Ghanem, mechanical engineer: design and machining",
-    desc="Final-year mechanical engineering student at ESILV. I design parts and machine them myself: a CubeSat accelerometer, the tank of a REXUS experiment, a reverse-draw crossbow. Looking for a permanent job in manufacturing or methods engineering from September 2027.",
+    desc="Final-year mechanical engineering student at ESILV, working across design and production: a CubeSat accelerometer, the tank of a REXUS experiment, a reverse-draw crossbow. Looking for a permanent job in manufacturing or methods engineering from September 2027.",
     part="Part GG-2027-001, revision C",
-    lead="Mechanical engineering student, final year at ESILV. I design parts, program the toolpaths and machine them, mostly in aluminium.",
+    lead="Mechanical engineering student, final year at ESILV. I work on problems that span design and production, at both scales: the overall architecture of a part, and the tolerance, surface finish or fixture that decides whether it can be made.",
     avail="<strong>Looking for a permanent job (CDI) from September 2027</strong> in manufacturing, industrialisation or methods engineering, in the Paris area.",
     email="Email", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-en.pdf",
     jump='<a href="#card">The program that engraved your card</a>',
@@ -203,9 +203,9 @@ T["fr"] = dict(T["en"])
 T["fr"].update(
     lang="fr", other="../", other_label="English", other_lang="en", prefix="../",
     title="Gabriel Ghanem, ingénieur mécanique : conception et usinage",
-    desc="Élève ingénieur mécanique en dernière année à l'ESILV. Je conçois des pièces et je les usine moi-même : un accéléromètre pour CubeSat, le réservoir d'une expérience REXUS, une arbalète à armement inversé. Je cherche un CDI en fabrication ou en méthodes à partir de septembre 2027.",
+    desc="Élève ingénieur mécanique en dernière année à l'ESILV, entre conception et production : un accéléromètre pour CubeSat, le réservoir d'une expérience REXUS, une arbalète à armement inversé. Je cherche un CDI en fabrication ou en méthodes à partir de septembre 2027.",
     part="Pièce GG-2027-001, révision C",
-    lead="Élève ingénieur mécanique, en dernière année à l'ESILV. Je conçois des pièces, je programme les parcours d'usinage et je les usine, surtout en aluminium.",
+    lead="Élève ingénieur mécanique, en dernière année à l'ESILV. Je travaille sur des problèmes qui traversent la conception et la production, aux deux échelles : l'architecture d'ensemble d'une pièce, et la tolérance, l'état de surface ou le montage qui décident si elle peut être fabriquée.",
     avail="<strong>Je cherche un CDI à partir de septembre 2027</strong> d'ingénieur fabrication, industrialisation ou méthodes, en Île-de-France.",
     email="E-mail", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-fr.pdf",
     jump='<a href="#card">Le programme qui a gravé votre carte</a>',
