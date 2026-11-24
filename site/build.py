@@ -61,6 +61,7 @@ T = {
     title="Gabriel Ghanem, mechanical engineer: design and machining",
     desc="Final-year mechanical engineering student at ESILV, working across design and production: a CubeSat accelerometer, the tank of a REXUS experiment, a reverse-draw crossbow. Looking for a permanent job in manufacturing or methods engineering from September 2027.",
     part="Part GG-2027-001, revision C",
+    me_alt="Gabriel on a rooftop at sunset, between two of Léofly's rockets.",
     lead="Mechanical engineering student, final year at ESILV. I work on problems that span design and production, at both scales: the overall architecture of a part, and the tolerance, surface finish or fixture that decides whether it can be made.",
     avail="<strong>Looking for a permanent job (CDI) from September 2027</strong> in manufacturing, industrialisation or methods engineering, in the Paris area.",
     email="Email", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-en.pdf",
@@ -180,7 +181,7 @@ T = {
           "2024 to 2026: technical director, in charge of manufacturing. Led the teams on the Krypton rocket, ran the CAD, CAM and machine-tool training, machined aluminium structure rings, steel and PMMA parts, and laid up carbon structures.",
           "2024 to 2026: designer of the CubeSat accelerometer.",
           "2023: team member on the Xénon rocket: CAD, CAM and FEA."],
-         (("portrait", "Gabriel on a rooftop at sunset between two of the club's rockets.", None),)),
+         ()),
         ("Pôle Léonard de Vinci", "2023 - 2024", "Workshop and lab assistant, part-time",
          ["Maintained the workshop's machine tools, installed safety devices, wrote technical documentation."], ()),
     ],
@@ -205,6 +206,7 @@ T["fr"].update(
     title="Gabriel Ghanem, ingénieur mécanique : conception et usinage",
     desc="Élève ingénieur mécanique en dernière année à l'ESILV, entre conception et production : un accéléromètre pour CubeSat, le réservoir d'une expérience REXUS, une arbalète à armement inversé. Je cherche un CDI en fabrication ou en méthodes à partir de septembre 2027.",
     part="Pièce GG-2027-001, révision C",
+    me_alt="Gabriel sur un toit au coucher du soleil, entre deux fusées de Léofly.",
     lead="Élève ingénieur mécanique, en dernière année à l'ESILV. Je travaille sur des problèmes qui traversent la conception et la production, aux deux échelles : l'architecture d'ensemble d'une pièce, et la tolérance, l'état de surface ou le montage qui décident si elle peut être fabriquée.",
     avail="<strong>Je cherche un CDI à partir de septembre 2027</strong> d'ingénieur fabrication, industrialisation ou méthodes, en Île-de-France.",
     email="E-mail", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-fr.pdf",
@@ -323,7 +325,7 @@ T["fr"].update(
           "2024 à 2026 : directeur technique, responsable fabrication. Encadrement des équipes de la fusée Krypton, formations CAO, FAO et machines-outils, usinage des bagues de structure en aluminium, de pièces en acier et en PMMA, structures en carbone.",
           "2024 à 2026 : concepteur de l'accéléromètre CubeSat.",
           "2023 : membre de l'équipe de la fusée Xénon : CAO, FAO et calcul par éléments finis."],
-         (("portrait", "Gabriel sur un toit au coucher du soleil, entre deux fusées de l'association.", None),)),
+         ()),
         ("Pôle Léonard de Vinci", "2023 - 2024", "Auxiliaire ateliers et laboratoires, temps partiel",
          ["Maintenance des machines-outils de l'atelier, mise en place de dispositifs de sécurité, rédaction de documentation technique."], ()),
     ],
@@ -392,7 +394,10 @@ def page(c):
 <header class="wrap hero">
   <div class="bar"><span class="lbl">{L("GG-2027-001  REV C", weight=1/10, label=c['part'])}</span><a href="{c['other']}" hreflang="{c['other_lang']}" lang="{c['other_lang']}">{c['other_label']}</a></div>
   <h1 class="name">{L("GABRIEL|GHANEM", weight=1/15, track=1.6, lead=1.42, label="Gabriel Ghanem")}</h1>
-  <p class="lead">{c['lead']}</p>
+  <div class="intro">
+    <figure class="me">{img("portrait", c['me_alt'], "(min-width: 1000px) 34vw, 40vw", eager=True, prefix=p)}</figure>
+    <p class="lead">{c['lead']}</p>
+  </div>
   <p class="avail">{c['avail']}</p>
   <nav class="links" aria-label="Contact"><a href="mailto:{EMAIL}">{c['email']}</a><a href="{LINKEDIN}">LinkedIn</a><a href="{p}{c['cvfile']}">{c['cv']}</a></nav>
   <p class="jump">{c['jump']}</p>
@@ -401,7 +406,7 @@ def page(c):
 <main>
 <section class="wrap project feature" id="cubesat" aria-labelledby="h-cubesat">
   <figure class="callouts bleed">
-    {img("cubesat-section", c['cs_alt'], "(min-width: 1000px) 55vw, 100vw", eager=True, prefix=p)}
+    {img("cubesat-section", c['cs_alt'], "(min-width: 1000px) 55vw, 100vw", prefix=p)}
     <svg class="leaders" viewBox="0 0 976 945" preserveAspectRatio="none" aria-hidden="true">
       <g stroke="#0f1113" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"><path vector-effect="non-scaling-stroke" d="M497,418 L700,330 L770,330"/><path vector-effect="non-scaling-stroke" d="M600,478 L720,560 L800,560"/><path vector-effect="non-scaling-stroke" d="M180,470 L120,560 L40,560"/></g>
       <g fill="#0f1113"><circle cx="497" cy="418" r="7"/><circle cx="600" cy="478" r="7"/><circle cx="180" cy="470" r="7"/></g>
