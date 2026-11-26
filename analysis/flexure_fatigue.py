@@ -14,7 +14,7 @@ MATERIALS = {
 }
 KT = 1.4          # fillet + torsion + machined-surface allowance
 N_LEGS = 3
-W = 2.6           # leg width [mm]
+W = 1.2           # leg width [mm]: 3.21 between slot centrelines less the 2.0 slot (2.2 with the first 1.0 slots; stiffness scales with W, stress at a given travel does not)
 TRAVEL_NORMAL = 1.0   # what a finger does when playing with it [mm]
 TRAVEL_ABUSE = 3.0    # someone pushing it as far as a fingertip goes [mm]
 

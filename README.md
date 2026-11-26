@@ -12,7 +12,7 @@ The card is a PLM demo in the hand: part number, revision, serial, and a QR code
 | Stock | 2 mm aluminium plate, 7075-T6 for the flexure |
 | Finished thickness | 1.70 mm: 0.15 mm faced off each side before engraving (v3) |
 | Faces | Engraved recto and verso (flip with dowel-pin registration) |
-| Flexure | Orthoplanar spring, 3 spiral legs, Ø26 mm pocket, web 0.40 mm centred in the thickness (recess 0.65 mm from each finished face) |
+| Flexure | Orthoplanar spring, 3 spiral legs, Ø26 mm pocket, web 0.40 mm centred in the thickness (recess 0.65 mm from each finished face). Slots 2.0 mm wide, legs 1.2 mm wide |
 | QR | Points to the GitHub Pages site served from `docs/` (final short URL to be decided before engraving) |
 
 ## Flexure sizing (first pass)
@@ -103,12 +103,14 @@ Locating the flip: two 3.05 mm holes, the card's own hole and one in an "ear" le
 | 1 Face | T60 | -0.13 |
 | 2 Ripples, 0.1 stepover | T31 | to -0.29 |
 | 3 Spring recess | T20 | -0.80 |
-| 4 Spiral slots through the web | T10 | -1.25 |
+| 4 Spiral slots through the web, 2.0 wide | T20 | -1.25 |
 | 5-8 Single-line engraving | T43 | -0.20 to -0.35 |
 | 9 Deburr face | T60 | -0.15 |
 | 10 Chamfer 0.15 | T43 | tip at -0.40 |
 | 11 Trim the ear off, rough | T20 | -1.93 |
 | 12 Trim the ear off, one finishing pass | T20 | -1.93 |
+
+The spiral slots were 1.0 mm wide, cut with T10 (1 mm). A card cut by mistake with the 2 mm end mill on the same centrelines gave a softer, more responsive spring, so since 2026-11-26 the slots are 2.0 mm: same toolpath, T20, same feeds (400 mm/min, 150 plunge, 0.25 steps). The legs go from 2.2 to 1.2 mm wide (about 55 % of the stiffness); the slots come within 0.40 mm of the boss and 0.20 mm of the pocket wall. In the Fusion document "Card v4" the three slot operations use T20; the archive `cam/Card_v3.f3d` and the check G-code below are older and still show T10.
 
 The card edge is finished in OP1 except for about 8 mm at the ear, which OP2 cuts. The design still says "3 H7" for the card hole; only the CAM uses 3.05 so far.
 
