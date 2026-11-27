@@ -48,6 +48,15 @@ def row_sizes(name, row=300):
     return f"{round(row * m['w'] / m['h'])}px"
 
 
+def fold(body):
+    """Each <h3> and the text up to the next one becomes a closed <details>; text before the first <h3> stays visible."""
+    parts = re.split(r"<h3>(.*?)</h3>", body)
+    out = parts[0]
+    for title, text in zip(parts[1::2], parts[2::2]):
+        out += f'<details><summary><h3>{title}</h3></summary><div class="fold">{text.strip()}</div></details>\n'
+    return out
+
+
 def fr_typo(s):
     """French spacing: narrow no-break space before ; : ! ? and inside guillemets (text only, not tags or URLs)."""
     parts = re.split(r"(<[^>]+>)", s)
@@ -67,7 +76,7 @@ T = {
     desc="Final-year mechanical engineering student at ESILV, working across design and production: a CubeSat accelerometer, the tank of a REXUS experiment, a reverse-draw crossbow. Looking for a permanent job in manufacturing or methods engineering from September 2027.",
     part="Part GG-2027-001, revision C",
     me_alt="Gabriel on a rooftop at sunset, between two of Léofly's rockets.",
-    lead="Mechanical engineering student, final year at ESILV. I work on problems that span design and production, at both scales: the overall architecture of a part, and the tolerance, surface finish or fixture that decides whether it can be made.",
+    lead="Mechanical engineering student, final year at ESILV. I work on problems that span design and production, at both scales: the overall architecture of a system, and the tolerance, surface finish or fixture that decides whether it can be made.",
     avail="<strong>Looking for a permanent job (CDI) from September 2027</strong> in manufacturing, industrialisation or methods engineering, in the Paris area.",
     email="Email", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-en.pdf",
     jump='<a href="#card">The program that engraved your card</a>',
@@ -107,7 +116,9 @@ T = {
     sd_h="STAR-D / REXUS", sd_label="STAR-D, REXUS",
     sd_ctx="Machining for another team's experiment on the REXUS 38 sounding rocket. Support role.",
     sd_body="""
+<h3>The experiment</h3>
 <p>STAR-D (Space Test of Amoeba Response: Dictyostelium) uses the amoeba <i>Dictyostelium discoideum</i> to study how reduced gravity affects the early stages of the immune response, and whether this organism could stand in for human immune cells in future space experiments. It runs as a fully autonomous lab aboard REXUS 38, from launch to recovery, with a launch planned for March 2027. The team comes from ESILV, AgroParisTech, Newcastle University and the University of Vienna.</p>
+<h3>What I did</h3>
 <p>I wasn't on the team: they brought me in for machining and design for manufacture.</p>
 <ul>
 <li>Machined the aluminium tank for the phase-change fluid, and printed its gaskets in TPU 60A, because no catalogue seal had the right shape.</li>
@@ -128,11 +139,14 @@ T = {
     xb_alt_proto="First full prototype of the crossbow standing upright in a vice.",
     xb_body="""
 <p class="keep">32 CNC-machined aluminium parts, third iteration after a PETG prototype and a laminated carbon one.</p>
+<h3>Why reverse draw</h3>
 <p>In a reverse-draw crossbow the limbs point back towards the shooter, so the string travels further for the same width and the weight sits closer to the grip. It also makes the cams and the cocking mechanism harder to design, which is the part I wanted to work on.</p>
+<h3>Decisions</h3>
 <p><b>One model drives everything.</b> The SolidWorks assembly is driven by a shared equations file, so changing one dimension updates every part that depends on it.</p>
 <p><b>Check before cutting aluminium.</b> Each new geometry was tested in POM-C or 3D printed before I machined it. The limbs are glass fibre; I prototyped them in POM.</p>
 <p><b>A simulator for the cocking mechanism.</b> I built it with AI assistance: I change the shape and position of the parts live and the kinematics recompute instantly, so I can try ideas without going back to CAD.</p>
 <p><b>Machining.</b> 32 parts in 6061, 7075 and 5052 aluminium, held by 120 fasteners. Adaptive toolpaths, multi-operation fixtures, minimum-quantity lubrication.</p>
+<h3>Status</h3>
 <p>Draw weight and bolt speed will come with testing.</p>""",
     xb_more=(("crossbow-cam", "A machined aluminium cam with its bearing, held in the hand.", "A cam, straight off the machine."),
              ("crossbow-top", "The prototype seen from above on the bench.", "From above: the limbs point back."),
@@ -142,6 +156,7 @@ T = {
     hk_ctx="Personal project. 6061 aluminium and a brass tip.",
     hk_body="""
 <p class="keep">Turned and milled, with arms that fold along the shaft.</p>
+<h3>Manual first, then CNC</h3>
 <p>I made the first version on manual machines. When I wanted more complex shapes, the workshop teacher told me to stop spending hours doing by hand what a CNC does better. So I redrew it for CNC and wrote the CAM myself: serrated arms, a knurled grip, and a brass tip, chosen for its looks and for the weight it puts at the bottom.</p>
 <p>CNC and manual lathe and mill. The arms come out of plate stock with adaptive toolpaths; the shaft is turned between centres.</p>""",
     hk_imgs=(("hook-deployed", "The aluminium grappling hook held up with its three arms open.", "Arms open."),
@@ -212,7 +227,7 @@ T["fr"].update(
     desc="Élève ingénieur mécanique en dernière année à l'ESILV, entre conception et production : un accéléromètre pour CubeSat, le réservoir d'une expérience REXUS, une arbalète à armement inversé. Je cherche un CDI en fabrication ou en méthodes à partir de septembre 2027.",
     part="Pièce GG-2027-001, révision C",
     me_alt="Gabriel sur un toit au coucher du soleil, entre deux fusées de Léofly.",
-    lead="Élève ingénieur mécanique, en dernière année à l'ESILV. Je travaille sur des problèmes qui traversent la conception et la production, aux deux échelles : l'architecture d'ensemble d'une pièce, et la tolérance, l'état de surface ou le montage qui décident si elle peut être fabriquée.",
+    lead="Élève ingénieur mécanique, en dernière année à l'ESILV. Je travaille sur des problèmes qui traversent la conception et la production, aux deux échelles : l'architecture d'ensemble d'un système, et la tolérance, l'état de surface ou le montage qui décident s'il peut être fabriqué.",
     avail="<strong>Je cherche un CDI à partir de septembre 2027</strong> d'ingénieur fabrication, industrialisation ou méthodes, en Île-de-France.",
     email="E-mail", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-fr.pdf",
     jump='<a href="#card">Le programme qui a gravé votre carte</a>',
@@ -251,7 +266,9 @@ T["fr"].update(
 
     sd_ctx="De l'usinage pour l'expérience d'une autre équipe, sur la fusée-sonde REXUS 38. Rôle d'appui.",
     sd_body="""
+<h3>L'expérience</h3>
 <p>STAR-D (Space Test of Amoeba Response: Dictyostelium) utilise l'amibe <i>Dictyostelium discoideum</i> pour étudier l'effet de la gravité réduite sur les premières étapes de la réponse immunitaire, et pour savoir si cet organisme pourrait remplacer les cellules immunitaires humaines dans de futures expériences spatiales. C'est un laboratoire entièrement autonome à bord de REXUS 38, du lancement à la récupération, avec un lancement prévu en mars 2027. L'équipe réunit l'ESILV, AgroParisTech, l'université de Newcastle et l'université de Vienne.</p>
+<h3>Ce que j'ai fait</h3>
 <p>Je ne faisais pas partie de l'équipe : elle m'a sollicité pour l'usinage et la conception pour la fabrication.</p>
 <ul>
 <li>Usiné le réservoir en aluminium du fluide à changement de phase, et imprimé ses joints en TPU 60A, faute de joint catalogue à la bonne forme.</li>
@@ -272,11 +289,14 @@ T["fr"].update(
     xb_alt_proto="Premier prototype complet de l'arbalète, debout dans un étau.",
     xb_body="""
 <p class="keep">32 pièces en aluminium usinées sur CNC, troisième itération après un prototype en PETG et un autre en carbone stratifié.</p>
+<h3>Pourquoi l'armement inversé</h3>
 <p>Sur une arbalète à armement inversé, les branches pointent vers le tireur : la corde parcourt une plus grande course pour la même largeur, et la masse se rapproche de la poignée. Les cames et le mécanisme d'armement deviennent plus difficiles à concevoir, et c'est justement ce qui m'intéressait.</p>
+<h3>Les choix</h3>
 <p><b>Un seul modèle pilote tout.</b> L'assemblage SolidWorks est piloté par un fichier d'équations partagé : changer une cote met à jour toutes les pièces qui en dépendent.</p>
 <p><b>Vérifier avant d'usiner l'aluminium.</b> Chaque nouvelle géométrie a été testée en POM-C ou imprimée en 3D avant l'usinage. Les branches sont en fibre de verre, prototypées en POM.</p>
 <p><b>Un simulateur du mécanisme d'armement.</b> Je l'ai développé avec l'aide de l'IA : je modifie en direct la forme et la position des pièces, la cinématique se recalcule instantanément, et je teste des idées sans repasser par la CAO.</p>
 <p><b>L'usinage.</b> 32 pièces en aluminium 6061, 7075 et 5052, assemblées par 120 éléments de visserie. Parcours adaptatifs, montages multi-opérations, lubrification MQL.</p>
+<h3>Où en est-elle</h3>
 <p>Puissance et vitesse des traits viendront avec les essais.</p>""",
     xb_more=(("crossbow-cam", "Une came en aluminium usinée, avec son roulement, tenue dans la main.", "Une came, à la sortie de la machine."),
              ("crossbow-top", "Le prototype vu de dessus sur l'établi.", "Vue de dessus : les branches pointent vers l'arrière."),
@@ -286,6 +306,7 @@ T["fr"].update(
     hk_ctx="Projet personnel. Aluminium 6061 et pointe en laiton.",
     hk_body="""
 <p class="keep">Tourné et fraisé, avec des bras qui se replient le long du fût.</p>
+<h3>D'abord en conventionnel, puis en CNC</h3>
 <p>J'ai fait la première version sur machines conventionnelles. Quand j'ai voulu des formes plus complexes, le professeur d'atelier m'a dit d'arrêter de passer des heures à faire à la main ce qu'une CNC fait mieux. Je l'ai donc redessiné pour la CNC et j'ai écrit la FAO moi-même : bras crantés, poignée moletée et pointe en laiton, choisie pour l'aspect et pour le poids qu'elle place en bas.</p>
 <p>Tour et fraiseuse, CNC et conventionnels. Les bras sortent d'une plaque en parcours adaptatifs ; le fût est tourné entre pointes.</p>""",
     hk_imgs=(("hook-deployed", "Le grappin en aluminium tenu à la main, trois bras ouverts.", "Bras ouverts."),
@@ -433,7 +454,7 @@ def page(c):
       </div>
       <figcaption>{c['spring_cap']}</figcaption>
     </figure>
-    {c['cs_body']}
+    {fold(c['cs_body'])}
   </div>
   <div class="media">
     <div class="pair">{fig(c['cs_proto'][0], c['cs_proto'][1], c['cs_proto'][2], "(min-width: 1000px) 22vw, 46vw", prefix=p)}{fig(c['cs_final'][0], c['cs_final'][1], c['cs_final'][2], "(min-width: 1000px) 22vw, 46vw", prefix=p)}</div>
@@ -443,7 +464,7 @@ def page(c):
 
 <section class="wrap project split" id="star-d" aria-labelledby="h-stard">
   <div class="head"><h2 id="h-stard">{L(c['sd_h'], track=0.5, label=c['sd_label'])}</h2><p class="ctx">{c['sd_ctx']}</p></div>
-  <div class="prose">{c['sd_body']}</div>
+  <div class="prose">{fold(c['sd_body'])}</div>
   <div class="media" style="margin-top:0">{''.join(fig(n, a, cp, "(min-width: 1000px) 40vw, 100vw", prefix=p) for n, a, cp in c['sd_imgs'])}</div>
 </section>
 
@@ -456,14 +477,14 @@ def page(c):
     <input type="range" min="0" max="100" value="50" aria-label="{html.escape(c['xb_range'])}">
     <span class="line" aria-hidden="true"></span>
   </div>
-  <div class="prose">{c['xb_body']}</div>
+  <div class="prose">{fold(c['xb_body'])}</div>
   <div class="media" style="grid-column:1/-1"><div class="strip" tabindex="0" role="group" aria-label="Photos">{''.join(S(n, a, cp) for n, a, cp in c['xb_more'])}</div></div>
 </section>
 
 <section class="wrap project split" id="hook" aria-labelledby="h-hook">
   <div class="head"><h2 id="h-hook">{L(c['hk_h'], track=0.5, label=c['hk_label'])}</h2><p class="ctx">{c['hk_ctx']}</p></div>
   <div class="pair">{''.join(fig(n, a, cp, "(min-width: 1000px) 22vw, 46vw", prefix=p) for n, a, cp in c['hk_imgs'])}</div>
-  <div class="prose">{c['hk_body']}</div>
+  <div class="prose">{fold(c['hk_body'])}</div>
   <div class="media" style="grid-column:1/-1"><div class="strip" tabindex="0" role="group" aria-label="Photos">{''.join(S(n, a, cp) for n, a, cp in c['hk_more'])}</div></div>
 </section>
 
