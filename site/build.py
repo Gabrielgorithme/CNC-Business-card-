@@ -94,18 +94,18 @@ T = {
     spring_cap="The POM-C spring on the block where I test-cut its outline. The 0.02 mm is a parallelism checked with the spring held flat: a 0.7 mm plastic disc warps as soon as you let go of it, so checking it free would reject good parts.",
     cs_body="""
 <h3>Where it started</h3>
-<p>In 2023 the club wanted to build a laser accelerometer. I read up on how they work and said it would be way too complicated for us, but that we could probably make one with a magnet, a spring and a Hall sensor. I knew Hall sensors because I'd just repaired the throttle on my electric scooter.</p>
+<p>In 2023 the club wanted to build a laser accelerometer. I read up on how they work and said it would be too complicated for us, but that we could probably make one with a magnet, a spring and a Hall sensor. I knew Hall sensors because I'd just repaired the throttle on my electric scooter.</p>
 <h3>How it works</h3>
 <p>A magnet sits on an ortho-planar spring: a flat disc cut with spiral slots, so its centre moves straight up and down without turning. When the rocket accelerates, the magnet moves. Two Hall sensors, one on each side, read the change in field, and a model turns the two signals into an acceleration. The spring sits in an oil bath so the magnet settles quickly instead of ringing after every shock.</p>
 <h3>From a strip of PLA to an ortho-planar spring</h3>
 <p>My first spring was just a thin strip of printed PLA bending under the magnet. Another student told me to look up ortho-planar springs, so I printed one. The final spring is machined from POM-C.</p>
 <h3>Reading the spring backwards</h3>
-<p>If the spring sits still at a given displacement, working out the acceleration is easy. Mine bounced around, so every reading depended on the magnet's inertia and on everything that had just happened before. At the same time I was taking a control-systems class, and honestly I couldn't connect Laplace transforms to anything I could actually build. Then it clicked: this was a control loop backwards. A PID drives an input to get the output you want; I only had the wobbly output and needed to work back to the input that caused it. Needless to say, I passed the class.</p>
+<p>If the spring sits still at a given displacement, working out the acceleration is easy. Mine bounced around, so every reading depended on the magnet's inertia and on everything that had just happened before. At the same time I was taking a control-systems class, and I couldn't connect Laplace transforms to anything I could actually build. Then it clicked: this was a control loop backwards. A PID drives an input to get the output you want; I only had the wobbly output and needed to work back to the input that caused it. Needless to say, I passed the class.</p>
 <h3>What went wrong</h3>
-<p>In practice it wasn't clean. Just holding the prototype in my hand made it vibrate and resonate, and the signal was too messy to work back from. The more the old bounces leak into the reading, the worse it gets, so they had to die out faster: I needed to damp the mass. The spring was sensitive enough that I could afford to lose some of that. After a couple of damping attempts that didn't work, I bought a Tupperware and a bottle of vegetable oil and dropped the spring in. People thought I'd lost it, until the signal, cleaned up in MATLAB and Simulink, started looking like a commercial sensor's.</p>
-<p>Then the oil found a new way to cause trouble: it crept up the Arduino's wires by capillary action. In the final build the loose wires became custom PCBs, the printed chassis became milled aluminium, and the Tupperware became a machined PMMA tank.</p>
+<p>In practice it wasn't clean. Just holding the prototype in my hand made it vibrate and resonate, and the signal was too messy to work back from. The more the old bounces leak into the reading, the worse it gets, so they had to die out faster: I needed to damp the mass. The spring was sensitive enough that I could afford to lose some of that. After a couple of damping attempts that didn't work, I bought a Tupperware and a bottle of vegetable oil and dropped the spring in. People thought I was crazy, until the signal, cleaned up in MATLAB and Simulink, started looking like a commercial sensor's.</p>
+<p>The oil then caused a new problem: it crept up the Arduino's wires by capillary action. In the final build the loose wires became custom PCBs, the printed chassis became milled aluminium, and the Tupperware became a machined PMMA tank.</p>
 <h3>Calibration</h3>
-<p>The coefficients I calculated from measuring the parts gave me nothing usable. So I fitted the model to real recordings instead, and that worked. Shaken next to a commercial accelerometer, it now follows it within 2 % RMS, 5 % at worst, over ±17 g. The rocket peaks at about 15 g.</p>
+<p>The coefficients I calculated from measuring the parts gave me nothing usable. So I fitted the model to real recordings instead, which worked. Shaken next to a commercial accelerometer, it now follows it within 2 % RMS, 5 % at worst, over ±17 g. The rocket peaks at about 15 g.</p>
 <h3>Decisions</h3>
 <p><b>The spring material.</b> The final spring is machined from POM-C, 0.7 mm thick, made with PBMC, one of the club's partners. POM-C creeps less under constant load, takes repeated bending better and isn't attacked by oil, while polycarbonate tends to crack under stress in contact with many oils. A machined part is also uniform; a printed one has layer lines that act like notches.</p>
 <p><b>Tolerances from simulation.</b> I ran a parametric Ansys study of manufacturing defects to see how far they move the spring's response, and set two specs from it: 0.02 mm parallelism between the faces, measured with the spring held flat, and Ra 0.8 µm.</p>
@@ -118,23 +118,31 @@ T = {
              ("cubesat-tank", "The machined PMMA oil tank on its own.", "The PMMA tank, machined."),
              ("cubesat-talk", "Gabriel presenting the accelerometer beside a rocket and a slide.", "Presenting it at a partner's event.")),
 
-    sd_h="STAR-D / REXUS", sd_label="STAR-D, REXUS",
-    sd_ctx="Machining for another team's experiment on the REXUS 38 sounding rocket. Support role.",
-    sd_body="""
-<h3>The experiment</h3>
-<p>STAR-D (Space Test of Amoeba Response: Dictyostelium) uses the amoeba <i>Dictyostelium discoideum</i> to study how reduced gravity affects the early stages of the immune response, and whether this organism could stand in for human immune cells in future space experiments. It runs as a fully autonomous lab aboard REXUS 38, from launch to recovery, with a launch planned for March 2027. The team comes from ESILV, AgroParisTech, Newcastle University and the University of Vienna.</p>
-<h3>What I did</h3>
-<p>I wasn't on the team. They brought me in for the machining and to make their parts easier to manufacture.</p>
+    lf_h="LÉOFLY", lf_label="Léofly",
+    lf_ctx="ESILV's experimental rocketry club, since 2023. Rockets and payloads for the C'Space (CNES) and EuRoC campaigns.",
+    lf_group=("Gabriel teaching a group of club members in front of the school's CNC machining centre.", "Machine-tool training for the members, in front of the school's machining centre, October 2025."),
+    lf_more=(("leofly-teach-lathe", "Gabriel explaining the tool turret of the school's CNC lathe.", "Training on the CNC lathe."),
+             ("leofly-stand", "The club's stand at an event: five rockets in front of a banner of partners.", "The club's stand, with our rockets."),
+             ("stard-tank", "Two machined aluminium tank halves with printed TPU gaskets and O-rings on a printer bed.", "STAR-D: the tank halves for the phase-change fluid, with their printed TPU gaskets."),
+             ("stard-module", "The STAR-D module, a blue cylinder, with the connector box being fitted.", "STAR-D: the connector box going into the module.")),
+    lf_body="""
+<p class="keep">I joined in 2023 and worked on the Xénon rocket (CAD, CAM, FEA). From 2024 to 2026 I was technical director, in charge of manufacturing, and since 2026 I've been the club's design and manufacturing referent.</p>
+<ul>
+<li>Led the teams on the Krypton rocket.</li>
+<li>Ran the CAD, CAM and machine-tool training for the members, on the school's CNC machines.</li>
+<li>Machined aluminium structure rings, steel and PMMA parts, and laid up carbon structures.</li>
+<li>Designed the CubeSat accelerometer above.</li>
+</ul>
+<h3>STAR-D, an experiment on REXUS 38</h3>
+<p>STAR-D (Space Test of Amoeba Response: Dictyostelium) uses the amoeba <i>Dictyostelium discoideum</i> to study how reduced gravity affects the early stages of the immune response, and whether this organism could stand in for human immune cells in future space experiments. It runs as a fully autonomous lab on the REXUS 38 sounding rocket, from launch to recovery, with a launch planned for March 2027. The team comes from ESILV, AgroParisTech, Newcastle University and the University of Vienna.</p>
+<p>I wasn't on the team. They brought me in for the machining and to make their parts easier to manufacture:</p>
 <ul>
 <li>Machined the aluminium tank for the phase-change fluid, and printed its gaskets in TPU 60A, since nothing off the shelf had the right shape.</li>
 <li>Helped define the sealing tolerances and surface specifications.</li>
-<li>Reworked parts of the CAD for manufacture, to cut the cost of the parts outsourced to JLCCNC.</li>
+<li>Reworked parts of the CAD to cut the cost of the parts outsourced to JLCCNC.</li>
 <li>Drew a large share of the connector box CAD and drawings.</li>
 <li>Adjusted the rails and other parts for an exact fit.</li>
-</ul>
-<p>It's their experiment; I helped build it.</p>""",
-    sd_imgs=(("stard-tank", "Two machined aluminium tank halves with printed TPU gaskets and O-rings on a printer bed.", "Tank halves for the phase-change fluid, with their printed TPU gaskets."),
-             ("stard-module", "The experiment module, a blue cylinder, with the connector box being fitted.", "The connector box going into the module.")),
+</ul>""",
 
     xb_h="REVERSE-DRAW|CROSSBOW", xb_label="Reverse-draw crossbow",
     xb_ctx="Personal project, designed and built from scratch. Still a prototype.",
@@ -145,14 +153,12 @@ T = {
     xb_body="""
 <p class="keep">32 CNC-machined aluminium parts, third iteration after a PETG prototype and a laminated carbon one.</p>
 <h3>Why reverse draw</h3>
-<p>In a reverse-draw crossbow the limbs point back towards the shooter, so the string travels further for the same width and the weight sits closer to the grip. It also makes the cams and the cocking mechanism harder to design, which is exactly the part I wanted to work on.</p>
+<p>In a reverse-draw crossbow the limbs point back towards the shooter, so the string travels further for the same width and the weight sits closer to the grip. It also makes the cams and the cocking mechanism harder to design, which is the part I wanted to work on.</p>
 <h3>Decisions</h3>
 <p><b>One model drives everything.</b> The SolidWorks assembly is driven by a shared equations file, so changing one dimension updates every part that depends on it.</p>
 <p><b>Check before cutting aluminium.</b> Each new geometry was tested in POM-C or 3D printed before I machined it. The limbs are glass fibre; I prototyped them in POM.</p>
 <p><b>A simulator for the cocking mechanism.</b> I built it with help from AI: I can change the shape and position of the parts live and the kinematics update instantly, so I can try ideas without going back into CAD.</p>
-<p><b>Machining.</b> 32 parts in 6061, 7075 and 5052 aluminium, held by 120 fasteners. Adaptive toolpaths, multi-operation fixtures, minimum-quantity lubrication.</p>
-<h3>Status</h3>
-<p>No numbers for draw weight or bolt speed yet. Those come with testing.</p>""",
+<p><b>Machining.</b> 32 parts in 6061, 7075 and 5052 aluminium, held by 120 fasteners. Adaptive toolpaths, multi-operation fixtures, minimum-quantity lubrication.</p>""",
     xb_more=(("crossbow-cam", "A machined aluminium cam with its bearing, held in the hand.", "A cam, straight off the machine."),
              ("crossbow-top", "The prototype seen from above on the bench.", "From above: the limbs point back."),
              ("crossbow-lever", "The green printed cocking lever in use.", "The cocking lever.")),
@@ -183,7 +189,7 @@ T = {
 
     cd_h="THE CARD YOU SCANNED", cd_label="The card you scanned",
     cd_ctx="Milled from aluminium plate on that same machine, raw finish. The disc in the middle is an ortho-planar spring, the same kind as in the accelerometer.",
-    cd_body="This is the engraving program I wrote for the back of your card, replayed: <b>25,354 lines of G-code</b>, one 90° V-bit. I took my phone number out.",
+    cd_body="This is the engraving program I wrote for the back of your card, replayed: <b>25,354 lines of G-code</b>, one 90° V-bit.",
     cd_replay="Replay",
 
     xp_h="EXPERIENCE",
@@ -201,12 +207,6 @@ T = {
           ("ambiance-rig", "Printed rig holding a flexible LED strip under magenta light.", "A measuring rig: lens-to-LED distance."),
           ("ambiance-4axis", "A block being machined on a 4-axis mill with a rotary axis.", "4-axis machining."),
           ("ambiance-cfd", "Convection streamlines around two heatsink designs: straight fins and concentric rings.", "Convection study of two heatsink designs."))),
-        ("Léofly, ESILV's experimental rocketry club", "2023 - TODAY", "Rockets and payloads for the C'Space (CNES) and EuRoC campaigns",
-         ["2026 to today: design and manufacturing referent. Technical support to the teams; brought in on STAR-D.",
-          "2024 to 2026: technical director, in charge of manufacturing. Led the teams on the Krypton rocket, ran the CAD, CAM and machine-tool training, machined aluminium structure rings, steel and PMMA parts, and laid up carbon structures.",
-          "2023 to 2026: designer of the CubeSat accelerometer.",
-          "2023: team member on the Xénon rocket: CAD, CAM and FEA."],
-         ()),
         ("Pôle Léonard de Vinci", "2023 - 2024", "Workshop and lab assistant, part-time",
          ["Maintained the workshop's machine tools, installed safety devices, wrote technical documentation."], ()),
     ],
@@ -256,12 +256,12 @@ T["fr"].update(
 <h3>D'une lamelle de PLA au ressort ortho-planaire</h3>
 <p>Mon premier ressort, c'était juste une fine lamelle de PLA imprimée qui pliait sous l'aimant. Un autre étudiant m'a conseillé de regarder les ressorts ortho-planaires, alors j'en ai imprimé un. Le ressort final est usiné en POM-C.</p>
 <h3>Lire le ressort à l'envers</h3>
-<p>Si le ressort reste immobile à un déplacement donné, l'accélération se calcule facilement. Le mien rebondissait dans tous les sens : chaque mesure dépendait de l'inertie de l'aimant et de tout ce qui venait de se passer. En même temps, je suivais le cours d'automatismes et asservissements, et honnêtement je ne voyais pas le lien entre les transformées de Laplace et quoi que ce soit de concret. Puis le déclic : c'était un asservissement à l'envers. Un PID pilote une entrée pour obtenir la sortie voulue ; moi, je n'avais que la sortie qui oscille et je devais remonter à l'entrée qui l'avait causée. Inutile de dire que j'ai validé le cours.</p>
+<p>Si le ressort reste immobile à un déplacement donné, l'accélération se calcule facilement. Le mien rebondissait : chaque mesure dépendait de l'inertie de l'aimant et de tout ce qui venait de se passer. En même temps, je suivais le cours d'automatismes et asservissements, et je ne voyais pas le lien entre les transformées de Laplace et quoi que ce soit de concret. Puis le déclic : c'était un asservissement à l'envers. Un PID pilote une entrée pour obtenir la sortie voulue ; moi, je n'avais que la sortie qui oscille et je devais remonter à l'entrée qui l'avait causée. Inutile de dire que j'ai validé le cours.</p>
 <h3>Ce qui n'a pas marché</h3>
-<p>En pratique, ce n'était pas propre. Rien qu'en tenant le prototype dans la main, il vibrait et entrait en résonance, et le signal était trop chaotique pour remonter à l'accélération. Plus les anciens rebonds se mélangent à la mesure, pire c'est, donc il fallait qu'ils s'éteignent plus vite : amortir la masse. Le ressort était assez sensible pour que je puisse en perdre un peu. Après quelques essais d'amortissement ratés, j'ai acheté un Tupperware et une bouteille d'huile végétale, et j'ai plongé le ressort dedans. Tout le monde m'a pris pour un fou, jusqu'à ce que le signal, nettoyé sous MATLAB et Simulink, ressemble à celui d'un capteur du commerce.</p>
-<p>Ensuite, l'huile a trouvé un autre moyen de poser problème : elle remontait le long des fils de l'Arduino par capillarité. Dans la version finale, les fils volants sont devenus des PCB sur mesure, le châssis imprimé un châssis en aluminium fraisé, et le Tupperware un réservoir en PMMA usiné.</p>
+<p>En pratique, ce n'était pas propre. Rien qu'en tenant le prototype dans la main, il vibrait et entrait en résonance, et le signal était trop chaotique pour remonter à l'accélération. Plus les anciens rebonds se mélangent à la mesure, pire c'est, donc il fallait qu'ils s'éteignent plus vite : amortir la masse. Le ressort était assez sensible pour que je puisse en perdre un peu. Après quelques essais d'amortissement ratés, j'ai acheté un Tupperware et une bouteille d'huile végétale, et j'ai plongé le ressort dedans. On m'a pris pour un fou, jusqu'à ce que le signal, nettoyé sous MATLAB et Simulink, ressemble à celui d'un capteur du commerce.</p>
+<p>Ensuite, l'huile a posé un nouveau problème : elle remontait le long des fils de l'Arduino par capillarité. Dans la version finale, les fils volants sont devenus des PCB sur mesure, le châssis imprimé un châssis en aluminium fraisé, et le Tupperware un réservoir en PMMA usiné.</p>
 <h3>L'étalonnage</h3>
-<p>Les coefficients que j'avais calculés à partir des mesures des pièces ne donnaient rien d'exploitable. J'ai donc calé le modèle directement sur des enregistrements réels, et là, ça a marché. Secoué à côté d'un accéléromètre du commerce, il le suit à 2 % RMS près, 5 % au pire, sur ±17 g. La fusée monte à environ 15 g.</p>
+<p>Les coefficients que j'avais calculés à partir des mesures des pièces ne donnaient rien d'exploitable. J'ai donc calé le modèle directement sur des enregistrements réels, et ça a fonctionné. Secoué à côté d'un accéléromètre du commerce, il le suit à 2 % RMS près, 5 % au pire, sur ±17 g. La fusée monte à environ 15 g.</p>
 <h3>Les choix</h3>
 <p><b>Le matériau du ressort.</b> Le ressort final est usiné en POM-C, épaisseur 0,7 mm, réalisé avec PBMC, l'un des partenaires de l'association. Le POM-C flue moins sous charge constante, résiste mieux aux flexions répétées et ne craint pas l'huile, alors que le polycarbonate a tendance à fissurer sous contrainte au contact de nombreuses huiles. Une pièce usinée est aussi homogène, alors qu'une pièce imprimée a des couches qui jouent le rôle d'entailles.</p>
 <p><b>Des tolérances issues de la simulation.</b> J'ai mené une étude Ansys paramétrique des défauts de fabrication pour voir de combien ils décalent la réponse du ressort, et j'en ai tiré deux spécifications : un parallélisme de 0,02 mm entre les faces, mesuré ressort maintenu à plat, et un Ra de 0,8 µm.</p>
@@ -274,22 +274,31 @@ T["fr"].update(
              ("cubesat-tank", "Le réservoir d'huile en PMMA usiné, seul.", "Le réservoir en PMMA, usiné."),
              ("cubesat-talk", "Gabriel présente l'accéléromètre à côté d'une fusée et d'une diapositive.", "Présentation lors d'un événement partenaire.")),
 
-    sd_ctx="De l'usinage pour l'expérience d'une autre équipe, sur la fusée-sonde REXUS 38. Rôle d'appui.",
-    sd_body="""
-<h3>L'expérience</h3>
-<p>STAR-D (Space Test of Amoeba Response: Dictyostelium) utilise l'amibe <i>Dictyostelium discoideum</i> pour étudier l'effet de la gravité réduite sur les premières étapes de la réponse immunitaire, et pour savoir si cet organisme pourrait remplacer les cellules immunitaires humaines dans de futures expériences spatiales. C'est un laboratoire entièrement autonome à bord de REXUS 38, du lancement à la récupération, avec un lancement prévu en mars 2027. L'équipe réunit l'ESILV, AgroParisTech, l'université de Newcastle et l'université de Vienne.</p>
-<h3>Ce que j'ai fait</h3>
-<p>Je ne faisais pas partie de l'équipe. Ils sont venus me chercher pour l'usinage et pour rendre leurs pièces plus faciles à fabriquer.</p>
+    lf_h="LÉOFLY", lf_label="Léofly",
+    lf_ctx="L'association de fusées expérimentales de l'ESILV, depuis 2023. Fusées et charges utiles pour les campagnes C'Space (CNES) et EuRoC.",
+    lf_group=("Gabriel forme un groupe de membres de l'association devant le centre d'usinage CNC de l'école.", "Formation machines-outils des membres, devant le centre d'usinage de l'école, octobre 2025."),
+    lf_more=(("leofly-teach-lathe", "Gabriel explique la tourelle porte-outils du tour CNC de l'école.", "Formation sur le tour CNC."),
+             ("leofly-stand", "Le stand de l'association lors d'un événement : cinq fusées devant une bâche de partenaires.", "Le stand de l'association, avec nos fusées."),
+             ("stard-tank", "Deux demi-réservoirs en aluminium usinés, avec joints TPU imprimés et joints toriques, sur un plateau d'imprimante.", "STAR-D : les demi-réservoirs du fluide à changement de phase et leurs joints TPU imprimés."),
+             ("stard-module", "Le module STAR-D, un cylindre bleu, pendant le montage du boîtier de connecteurs.", "STAR-D : le boîtier de connecteurs entre dans le module.")),
+    lf_body="""
+<p class="keep">J'ai rejoint l'association en 2023 et travaillé sur la fusée Xénon (CAO, FAO, calcul par éléments finis). De 2024 à 2026, j'ai été directeur technique, responsable fabrication, et depuis 2026 je suis référent conception et fabrication.</p>
+<ul>
+<li>J'ai encadré les équipes de la fusée Krypton.</li>
+<li>J'ai animé les formations CAO, FAO et machines-outils des membres, sur les machines CNC de l'école.</li>
+<li>J'ai usiné des bagues de structure en aluminium, des pièces en acier et en PMMA, et stratifié des structures en carbone.</li>
+<li>J'ai conçu l'accéléromètre CubeSat présenté plus haut.</li>
+</ul>
+<h3>STAR-D, une expérience sur REXUS 38</h3>
+<p>STAR-D (Space Test of Amoeba Response: Dictyostelium) utilise l'amibe <i>Dictyostelium discoideum</i> pour étudier l'effet de la gravité réduite sur les premières étapes de la réponse immunitaire, et pour savoir si cet organisme pourrait remplacer les cellules immunitaires humaines dans de futures expériences spatiales. C'est un laboratoire entièrement autonome à bord de la fusée-sonde REXUS 38, du lancement à la récupération, avec un lancement prévu en mars 2027. L'équipe réunit l'ESILV, AgroParisTech, l'université de Newcastle et l'université de Vienne.</p>
+<p>Je ne faisais pas partie de l'équipe. Ils sont venus me chercher pour l'usinage et pour rendre leurs pièces plus faciles à fabriquer :</p>
 <ul>
 <li>Usiné le réservoir en aluminium du fluide à changement de phase, et imprimé ses joints en TPU 60A, faute de joint du commerce à la bonne forme.</li>
 <li>Participé à la définition des tolérances d'étanchéité et des états de surface.</li>
-<li>Repris une partie de la CAO pour la fabrication, afin de réduire le coût des pièces sous-traitées chez JLCCNC.</li>
+<li>Repris une partie de la CAO pour réduire le coût des pièces sous-traitées chez JLCCNC.</li>
 <li>Réalisé une grande partie de la CAO et des plans du boîtier de connecteurs.</li>
 <li>Ajusté les rails et d'autres pièces pour un montage exact.</li>
-</ul>
-<p>C'est leur expérience ; j'ai aidé à la construire.</p>""",
-    sd_imgs=(("stard-tank", "Deux demi-réservoirs en aluminium usinés, avec joints TPU imprimés et joints toriques, sur un plateau d'imprimante.", "Les demi-réservoirs du fluide à changement de phase et leurs joints TPU imprimés."),
-             ("stard-module", "Le module de l'expérience, un cylindre bleu, pendant le montage du boîtier de connecteurs.", "Le boîtier de connecteurs entre dans le module.")),
+</ul>""",
 
     xb_h="ARBALÈTE À|ARMEMENT INVERSÉ", xb_label="Arbalète à armement inversé",
     xb_ctx="Projet personnel, conçu et fabriqué de A à Z. Encore un prototype.",
@@ -305,9 +314,7 @@ T["fr"].update(
 <p><b>Un seul modèle pilote tout.</b> L'assemblage SolidWorks est piloté par un fichier d'équations partagé : changer une cote met à jour toutes les pièces qui en dépendent.</p>
 <p><b>Vérifier avant d'usiner l'aluminium.</b> Chaque nouvelle géométrie a été testée en POM-C ou imprimée en 3D avant l'usinage. Les branches sont en fibre de verre, prototypées en POM.</p>
 <p><b>Un simulateur du mécanisme d'armement.</b> Je l'ai développé avec l'aide de l'IA : je modifie en direct la forme et la position des pièces, la cinématique se met à jour instantanément, et je teste des idées sans retourner dans la CAO.</p>
-<p><b>L'usinage.</b> 32 pièces en aluminium 6061, 7075 et 5052, assemblées par 120 éléments de visserie. Parcours adaptatifs, montages multi-opérations, lubrification MQL.</p>
-<h3>Où en est-elle</h3>
-<p>Pas encore de chiffres de puissance ni de vitesse : ça viendra avec les essais.</p>""",
+<p><b>L'usinage.</b> 32 pièces en aluminium 6061, 7075 et 5052, assemblées par 120 éléments de visserie. Parcours adaptatifs, montages multi-opérations, lubrification MQL.</p>""",
     xb_more=(("crossbow-cam", "Une came en aluminium usinée, avec son roulement, tenue dans la main.", "Une came, à la sortie de la machine."),
              ("crossbow-top", "Le prototype vu de dessus sur l'établi.", "Vue de dessus : les branches pointent vers l'arrière."),
              ("crossbow-lever", "Le levier d'armement vert imprimé, en cours d'utilisation.", "Le levier d'armement.")),
@@ -317,7 +324,7 @@ T["fr"].update(
     hk_body="""
 <p class="keep">Tourné et fraisé, avec des bras qui se replient le long du fût. L'idée est venue d'amis qui en voulaient un pour l'escalade.</p>
 <h3>D'abord en conventionnel, puis en CNC</h3>
-<p>J'ai fait la première version sur machines conventionnelles. Quand j'ai voulu des formes plus complexes, le professeur d'atelier m'a dit d'arrêter de passer des heures à faire à la main ce qu'une CNC fait mieux. Je l'ai donc redessiné pour la CNC et j'ai écrit la FAO moi-même : bras crantés, poignée moletée et pointe en laiton, pour le look et pour le poids en bas.</p>
+<p>J'ai fait la première version sur machines conventionnelles. Quand j'ai voulu des formes plus complexes, le professeur d'atelier m'a dit d'arrêter de passer des heures à faire à la main ce qu'une CNC fait mieux. Je l'ai donc redessiné pour la CNC et j'ai écrit la FAO moi-même : bras crantés, poignée moletée et pointe en laiton, pour l'esthétique et pour le poids en bas.</p>
 <p>Tour et fraiseuse, CNC et conventionnels. Les bras sortent d'une plaque en parcours adaptatifs ; le fût est tourné entre pointes.</p>""",
     hk_imgs=(("hook-deployed", "Le grappin en aluminium tenu à la main, trois bras ouverts.", "Bras ouverts."),
              ("hook-folded", "Le grappin, bras repliés le long du fût.", "Bras repliés.")),
@@ -338,7 +345,7 @@ T["fr"].update(
 
     cd_h="LA CARTE QUE VOUS|AVEZ SCANNÉE", cd_label="La carte que vous avez scannée",
     cd_ctx="Usinée dans une plaque d'aluminium sur cette même machine, finition brute. Le disque au centre est un ressort ortho-planaire, de la même famille que celui de l'accéléromètre.",
-    cd_body="Voici le programme de gravure que j'ai écrit pour le verso de votre carte, rejoué : <b>25 354 lignes de G-code</b>, un seul outil à graver à 90°. J'ai retiré mon numéro de téléphone.",
+    cd_body="Voici le programme de gravure que j'ai écrit pour le verso de votre carte, rejoué : <b>25 354 lignes de G-code</b>, un seul outil à graver à 90°.",
     cd_replay="Rejouer",
 
     xp_h="EXPÉRIENCE",
@@ -356,12 +363,6 @@ T["fr"].update(
           ("ambiance-rig", "Banc imprimé tenant un ruban LED flexible sous une lumière magenta.", "Un banc de mesure : distance lentille-LED."),
           ("ambiance-4axis", "Un bloc usiné sur une fraiseuse 4 axes avec axe rotatif.", "Usinage 4 axes."),
           ("ambiance-cfd", "Lignes de courant de convection autour de deux dissipateurs : ailettes droites et anneaux concentriques.", "Étude de convection de deux dissipateurs."))),
-        ("Léofly, l'association de fusées expérimentales de l'ESILV", "2023 - AUJOURD'HUI", "Fusées et charges utiles pour les campagnes C'Space (CNES) et EuRoC",
-         ["Depuis 2026 : référent conception et fabrication. Appui technique aux équipes ; sollicité sur STAR-D.",
-          "2024 à 2026 : directeur technique, responsable fabrication. Encadrement des équipes de la fusée Krypton, formations CAO, FAO et machines-outils, usinage des bagues de structure en aluminium, de pièces en acier et en PMMA, structures en carbone.",
-          "2023 à 2026 : concepteur de l'accéléromètre CubeSat.",
-          "2023 : membre de l'équipe de la fusée Xénon : CAO, FAO et calcul par éléments finis."],
-         ()),
         ("Pôle Léonard de Vinci", "2023 - 2024", "Auxiliaire ateliers et laboratoires, temps partiel",
          ["Maintenance des machines-outils de l'atelier, mise en place de dispositifs de sécurité, rédaction de documentation technique."], ()),
     ],
@@ -472,10 +473,11 @@ def page(c):
   </div>
 </section>
 
-<section class="wrap project split" id="star-d" aria-labelledby="h-stard">
-  <div class="head"><h2 id="h-stard">{L(c['sd_h'], track=0.5, label=c['sd_label'])}</h2><p class="ctx">{c['sd_ctx']}</p></div>
-  <div class="prose">{fold(c['sd_body'])}</div>
-  <div class="media" style="margin-top:0">{''.join(fig(n, a, cp, "(min-width: 1000px) 40vw, 100vw", prefix=p) for n, a, cp in c['sd_imgs'])}</div>
+<section class="wrap project split" id="leofly" aria-labelledby="h-leofly">
+  <div class="head"><h2 id="h-leofly">{L(c['lf_h'], track=0.5, label=c['lf_label'])}</h2><p class="ctx">{c['lf_ctx']}</p></div>
+  <div class="prose">{fold(c['lf_body'])}</div>
+  <figure>{img("leofly-teach-group", c['lf_group'][0], "(min-width: 1000px) 45vw, 100vw", prefix=p)}<figcaption>{c['lf_group'][1]}</figcaption></figure>
+  <div class="media" style="grid-column:1/-1"><div class="strip" tabindex="0" role="group" aria-label="Photos">{''.join(S(n, a, cp) for n, a, cp in c['lf_more'])}</div></div>
 </section>
 
 <section class="wrap project split" id="crossbow" aria-labelledby="h-crossbow">

@@ -39,6 +39,8 @@ IMAGES = {
     "cnc-machine":     (UP / "eadca23c63ffbc190c0a0576d2287183.jpg", (0, 900, 4284, 5712), (480, 960, 1400)),
     "portrait":        (UP / "b88b6f4e55536f13602a9dec436dbf46.jpg", (0, 200, 2021, 3400), (420, 840)),
     "leofly-stand":    (SRC / "06-leofly/3-stand.webp", None, (480, 709)),
+    "leofly-teach-lathe": (UP / "teach-lathe.jpg", None, (480, 960)),
+    "leofly-teach-group": (UP / "teach-group.jpg", None, (640, 1280)),
     "ambiance-showcase":   (UP / "showcase.jpg", None, (480, 960)),
     "ambiance-notredame":  (UP / "notredame-stair.jpg", None, (480, 960)),
     "ambiance-belfry":     (UP / "notredame-bell.jpg", None, (480, 960)),
