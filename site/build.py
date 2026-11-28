@@ -73,10 +73,10 @@ T = {
 "en": dict(
     lang="en", other="fr/", other_label="Français", other_lang="fr", prefix="",
     title="Gabriel Ghanem, mechanical engineer: design and machining",
-    desc="Final-year mechanical engineering student at ESILV, working across design and production: a CubeSat accelerometer, the tank of a REXUS experiment, a reverse-draw crossbow. Looking for a permanent job in manufacturing or methods engineering from September 2027.",
+    desc="Final-year mechanical engineering student at ESILV and apprentice industrial design engineer, working across design and production: a CubeSat accelerometer, the tank of a REXUS experiment, a reverse-draw crossbow. Looking for a permanent job in manufacturing or methods engineering from September 2027.",
     part="Part GG-2027-001, revision C",
     me_alt="Gabriel on a rooftop at sunset, between two of Léofly's rockets.",
-    lead="Mechanical engineering student, final year at ESILV. I work on problems that span design and production, at both scales: the overall architecture of a system, and the tolerance, surface finish or fixture that decides whether it can be made.",
+    lead="Final-year mechanical engineering student at ESILV, and apprentice industrial design engineer at Ambiance Lumière. I work on problems that span design and production, at both scales: the overall architecture of a system, and the tolerance, surface finish or fixture that decides whether it can be made.",
     avail="<strong>Looking for a permanent job (CDI) from September 2027</strong> in manufacturing, industrialisation or methods engineering, in the Paris area.",
     email="Email", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-en.pdf",
     jump='<a href="#card">The program that engraved your card</a>',
@@ -192,7 +192,9 @@ T = {
     cd_body="This is the engraving program I wrote for the back of your card, replayed: <b>25,354 lines of G-code</b>, one 90° V-bit.",
     cd_replay="Replay",
 
-    xp_h="EXPERIENCE",
+    am_h="AMBIANCE LUMIÈRE", am_label="Ambiance Lumière",
+    am_ctx="Apprentice industrial design engineer (work-study), July 2025 to September 2027. A maker of custom architectural lighting in Alfortville, from prototype to small series.",
+    ws="<p><b>Pôle Léonard de Vinci</b>: workshop and lab assistant, part-time, 2023 to 2024. I maintained the workshop's machine tools, installed safety devices and wrote technical documentation.</p>",
     xp=[
         ("Ambiance Lumière, Alfortville", "JULY 2025 - SEPT. 2027", "Industrial design engineer, work-study",
          ["A maker of custom architectural lighting, from prototype to small series.",
@@ -211,7 +213,7 @@ T = {
          ["Maintained the workshop's machine tools, installed safety devices, wrote technical documentation."], ()),
     ],
 
-    ed_h="EDUCATION AND TOOLS",
+    ed_h="BACKGROUND AND TOOLS",
     ed="""
 <p><b>ESILV, Paris-La Défense</b>: engineering degree (diplôme d'ingénieur, master's level), major in modelling and computational mechanics. 2022 to 2027, work-study since 2025. In 2027, nine weeks of hands-on welding training in Dublin.</p>
 <p>I model in SolidWorks and Fusion 360, and have also worked in CATIA, 3DEXPERIENCE and Onshape. I program CAM in Fusion 360, 3DEXPERIENCE and Vectric Aspire. I run FEA in Ansys and Abaqus, plus thermal simulation, lay out PCBs in KiCad, and write Python, MATLAB, C++ and C#.</p>
@@ -229,10 +231,10 @@ T["fr"] = dict(T["en"])
 T["fr"].update(
     lang="fr", other="../", other_label="English", other_lang="en", prefix="../",
     title="Gabriel Ghanem, ingénieur mécanique : conception et usinage",
-    desc="Élève ingénieur mécanique en dernière année à l'ESILV, entre conception et production : un accéléromètre pour CubeSat, le réservoir d'une expérience REXUS, une arbalète à armement inversé. Je cherche un CDI en fabrication ou en méthodes à partir de septembre 2027.",
+    desc="Élève ingénieur mécanique en dernière année à l'ESILV, en alternance comme ingénieur en conception industrielle, entre conception et production : un accéléromètre pour CubeSat, le réservoir d'une expérience REXUS, une arbalète à armement inversé. Je cherche un CDI en fabrication ou en méthodes à partir de septembre 2027.",
     part="Pièce GG-2027-001, révision C",
     me_alt="Gabriel sur un toit au coucher du soleil, entre deux fusées de Léofly.",
-    lead="Élève ingénieur mécanique, en dernière année à l'ESILV. Je travaille sur des problèmes qui traversent la conception et la production, aux deux échelles : l'architecture d'ensemble d'un système, et la tolérance, l'état de surface ou le montage qui décident s'il peut être fabriqué.",
+    lead="Élève ingénieur mécanique en dernière année à l'ESILV, en alternance comme ingénieur en conception industrielle chez Ambiance Lumière. Je travaille sur des problèmes qui traversent la conception et la production, aux deux échelles : l'architecture d'ensemble d'un système, et la tolérance, l'état de surface ou le montage qui décident s'il peut être fabriqué.",
     avail="<strong>Je cherche un CDI à partir de septembre 2027</strong> d'ingénieur fabrication, industrialisation ou méthodes, en Île-de-France.",
     email="E-mail", cv="CV (PDF)", cvfile="assets/cv/gabriel-ghanem-cv-fr.pdf",
     jump='<a href="#card">Le programme qui a gravé votre carte</a>',
@@ -348,7 +350,9 @@ T["fr"].update(
     cd_body="Voici le programme de gravure que j'ai écrit pour le verso de votre carte, rejoué : <b>25 354 lignes de G-code</b>, un seul outil à graver à 90°.",
     cd_replay="Rejouer",
 
-    xp_h="EXPÉRIENCE",
+    am_h="AMBIANCE LUMIÈRE", am_label="Ambiance Lumière",
+    am_ctx="Alternant ingénieur en conception industrielle, de juillet 2025 à septembre 2027. Fabricant de luminaires architecturaux sur mesure à Alfortville, du prototype à la petite série.",
+    ws="<p><b>Pôle Léonard de Vinci</b> : auxiliaire ateliers et laboratoires, à temps partiel, de 2023 à 2024. J'ai assuré la maintenance des machines-outils de l'atelier, mis en place des dispositifs de sécurité et rédigé de la documentation technique.</p>",
     xp=[
         ("Ambiance Lumière, Alfortville", "JUILLET 2025 - SEPT. 2027", "Alternant ingénieur conception industrielle",
          ["Fabricant de luminaires architecturaux sur mesure, du prototype à la petite série.",
@@ -367,7 +371,7 @@ T["fr"].update(
          ["Maintenance des machines-outils de l'atelier, mise en place de dispositifs de sécurité, rédaction de documentation technique."], ()),
     ],
 
-    ed_h="FORMATION ET OUTILS",
+    ed_h="PARCOURS ET OUTILS",
     ed="""
 <p><b>ESILV, Paris-La Défense</b> : diplôme d'ingénieur, majeure Modélisation et mécanique numérique. De 2022 à 2027, en alternance depuis 2025. En 2027, neuf semaines de formation pratique au soudage à Dublin.</p>
 <p>Je modélise sous SolidWorks et Fusion 360, et j'ai aussi travaillé sous CATIA, 3DEXPERIENCE et Onshape. Je programme la FAO sous Fusion 360, 3DEXPERIENCE et Vectric Aspire. Je fais du calcul par éléments finis sous Ansys et Abaqus, de la simulation thermique, je route des PCB sous KiCad, et j'écris en Python, MATLAB, C++ et C#.</p>
@@ -415,17 +419,8 @@ def page(c):
     S = lambda n, a, cap=None: fig(n, a, cap, row_sizes(n), prefix=p)
     call = c["cs_call"]
     tb = "".join(f'<div><dt>{k}</dt><dd>{L(v, weight=1/11)}<span class="u">{u}</span></dd></div>' for k, v, u in c["tb"])
-    xp = []
-    for name_, when, role, items, imgs in c["xp"]:
-        pics = "".join(f'<figure class="{"portrait" if n == "portrait" else ""}">{img(n, a, row_sizes(n) if len(imgs) > 1 else "(min-width: 1000px) 30vw, 90vw", prefix=p)}{f"<figcaption>{cp}</figcaption>" if cp else ""}</figure>' for n, a, cp in imgs)
-        strip = f'<div class="strip" tabindex="0" role="group" aria-label="Photos">{pics}</div>' if len(imgs) > 1 else pics
-        xp.append(f"""<article>
-<span class="when">{L(when, weight=1/10)}</span>
-<h3>{name_}</h3>
-<p class="role">{role}</p>
-<ul>{''.join(f'<li>{i}</li>' for i in items)}</ul>
-{strip}
-</article>""")
+    _, _, _, am_items, am_imgs = c["xp"][0]
+    am_main, am_rest = am_imgs[0], am_imgs[1:]
     body = f"""
 <body>
 <header class="wrap hero">
@@ -493,6 +488,13 @@ def page(c):
   <div class="media" style="grid-column:1/-1"><div class="strip" tabindex="0" role="group" aria-label="Photos">{''.join(S(n, a, cp) for n, a, cp in c['xb_more'])}</div></div>
 </section>
 
+<section class="wrap project split" id="ambiance" aria-labelledby="h-ambiance">
+  <div class="head"><h2 id="h-ambiance">{L(c['am_h'], track=0.5, label=c['am_label'])}</h2><p class="ctx">{c['am_ctx']}</p></div>
+  <div class="prose"><ul>{''.join(f'<li>{i}</li>' for i in am_items[1:])}</ul></div>
+  <figure>{img(am_main[0], am_main[1], "(min-width: 1000px) 45vw, 100vw", prefix=p)}<figcaption>{am_main[2]}</figcaption></figure>
+  <div class="media" style="grid-column:1/-1"><div class="strip" tabindex="0" role="group" aria-label="Photos">{''.join(S(n, a, cp) for n, a, cp in am_rest)}</div></div>
+</section>
+
 <section class="wrap project split" id="hook" aria-labelledby="h-hook">
   <div class="head"><h2 id="h-hook">{L(c['hk_h'], track=0.5, label=c['hk_label'])}</h2><p class="ctx">{c['hk_ctx']}</p></div>
   <div class="pair">{''.join(fig(n, a, cp, "(min-width: 1000px) 22vw, 46vw", prefix=p) for n, a, cp in c['hk_imgs'])}</div>
@@ -512,6 +514,18 @@ def page(c):
   <figure>{img(c['cn_img'][0], c['cn_img'][1], "(min-width: 1000px) 45vw, 100vw", prefix=p)}</figure>
 </section>
 
+<section class="wrap project" id="education" aria-labelledby="h-ed">
+  <div class="head"><h2 id="h-ed">{L(c['ed_h'], track=0.5)}</h2></div>
+  <div class="facts">{c['ed']}{c['ws']}</div>
+</section>
+
+<section class="wrap contact" id="contact" aria-labelledby="h-ct">
+  <div class="head"><h2 id="h-ct">{L(c['ct_h'], track=0.5)}</h2></div>
+  <p class="summary">{c['ct']}</p>
+  <p class="big"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+  <p class="links"><a href="{LINKEDIN}">LinkedIn</a><a href="{p}{c['cvfile']}">{c['cv']}</a></p>
+</section>
+
 <section class="bed" id="card" aria-labelledby="h-card">
   <div class="wrap inner">
     <div class="head"><h2 id="h-card">{L(c['cd_h'], track=0.5, label=c['cd_label'])}</h2><p class="ctx">{c['cd_ctx']}</p></div>
@@ -521,23 +535,6 @@ def page(c):
     </div>
     <p>{c['cd_body']}</p>
   </div>
-</section>
-
-<section class="wrap project" id="experience" aria-labelledby="h-xp">
-  <div class="head"><h2 id="h-xp">{L(c['xp_h'], track=0.5)}</h2></div>
-  <div class="xp">{''.join(xp)}</div>
-</section>
-
-<section class="wrap project" id="education" aria-labelledby="h-ed">
-  <div class="head"><h2 id="h-ed">{L(c['ed_h'], track=0.5)}</h2></div>
-  <div class="facts">{c['ed']}</div>
-</section>
-
-<section class="wrap contact" id="contact" aria-labelledby="h-ct">
-  <div class="head"><h2 id="h-ct">{L(c['ct_h'], track=0.5)}</h2></div>
-  <p class="summary">{c['ct']}</p>
-  <p class="big"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
-  <p class="links"><a href="{LINKEDIN}">LinkedIn</a><a href="{p}{c['cvfile']}">{c['cv']}</a></p>
 </section>
 </main>
 
