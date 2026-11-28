@@ -82,7 +82,7 @@ T = {
     jump='<a href="#card">The program that engraved your card</a>',
 
     cs_h="MAGNETIC|ACCELEROMETER", cs_label="Magnetic accelerometer",
-    cs_ctx="A 1U CubeSat experiment for Léofly, my rocketry club. 2024 to 2026.",
+    cs_ctx="A 1U CubeSat experiment for Léofly, my rocketry club. 2023 to 2026.",
     cs_alt="Section render of the accelerometer: a magnet on a flat spring inside a clear oil tank, PCBs below, aluminium frame.",
     cs_call=("MAGNET", "SPRING|POM-C 0.7", "PMMA|OIL TANK"),
     cs_sum="A magnet on a flat spring, damped in oil, read by two Hall sensors at 8 kHz. I designed the mechanics and the model that turns the two signals into an acceleration, then machined the parts.",
@@ -93,18 +93,23 @@ T = {
     spring_spec="Spring specification: parallelism 0.02 mm to datum A, inspected held flat (ISO 10579-NR), roughness Ra 0.8 µm.",
     spring_cap="The POM-C spring on the block where I test-cut its outline. The 0.02 mm is a parallelism checked with the spring held flat: a 0.7 mm plastic disc warps as soon as it's free, so a free-state check would reject good parts.",
     cs_body="""
-<h3>The problem</h3>
-<p>Léofly wanted an experiment of its own in a 1U CubeSat, a 100 mm cube. I wanted to measure acceleration with a mechanism we could design and make ourselves, instead of reading a bought sensor chip.</p>
+<h3>Where it started</h3>
+<p>In 2023 the club wanted a laser accelerometer. I read up on how they work, argued it would be too complicated to build ourselves, and proposed a magnet on a spring read by a Hall sensor instead. I knew Hall sensors from repairing the throttle of my electric scooter.</p>
 <h3>How it works</h3>
-<p>A magnet sits on an ortho-planar spring: a flat disc cut with spiral slots, so its centre moves straight up and down without turning. When the rocket accelerates, the magnet moves. Two Hall sensors, one on each side, read the change in field, and a MATLAB model fitted to calibration data turns the two signals into an acceleration. The spring sits in an oil bath so the magnet stops quickly instead of ringing after every shock.</p>
+<p>A magnet sits on an ortho-planar spring: a flat disc cut with spiral slots, so its centre moves straight up and down without turning. When the rocket accelerates, the magnet moves. Two Hall sensors, one on each side, read the change in field, and a model turns the two signals into an acceleration. The spring sits in an oil bath so the magnet stops quickly instead of ringing after every shock.</p>
+<h3>From a strip of PLA to an ortho-planar spring</h3>
+<p>The first spring was a thin strip of printed PLA flexing under the magnet. Another student pointed me to ortho-planar springs, whose spiral legs keep the centre moving straight. I printed one, then the final spring was machined from POM-C.</p>
+<h3>Reading the spring backwards</h3>
+<p>If the spring holds still at a given displacement, the acceleration follows directly. Mine bounced: the reading at any moment depends on the magnet's inertia and on everything that happened just before. At the time I was taking a control-systems class, and Laplace transforms felt unrelated to anything I could build. Then it clicked: this is a control loop run in reverse. A PID drives an input to get the output you want; here I only see the wobbly output and have to work back to the input that caused it. The class made sense after that.</p>
+<h3>What went wrong</h3>
+<p>In practice the inversion wasn't clean. Just holding the prototype made it vibrate and resonate, and the signal was too intricate to invert reliably. If past motion weighs too much on the reading, the fix is to make it fade faster: damp the mass. The spring was sensitive enough to give some of that up. After a couple of damping attempts that didn't work, I bought a plastic food box and a bottle of vegetable oil and sank the spring in it. People thought I was mad, until the signal, processed in MATLAB and Simulink, started to look like a commercial sensor's.</p>
+<p>The oil brought its own problem: it crept along the Arduino's cables by capillary action. The final build replaces the loose wiring with custom PCBs, the printed chassis with a milled aluminium one, and the food box with a machined PMMA tank.</p>
+<h3>Calibration</h3>
+<p>The coefficients I derived from measuring the parts gave nothing usable. A model-fitting tool did: I calibrated the model on real recordings instead. Shaken next to a commercial accelerometer, it now tracks the reference with a 2 % RMS error, 5 % at worst, over a ±17 g range. The rocket peaks at about 15 g.</p>
 <h3>Decisions</h3>
-<p><b>The spring material.</b> The first spring was 3D printed in polycarbonate. The final one is machined from POM-C, 0.7 mm thick, made with PBMC as partner. POM-C creeps less under constant load, takes repeated bending better and isn't attacked by oil, while polycarbonate tends to crack under stress in contact with many oils. A machined part is also uniform; a printed one has layer lines that act like notches.</p>
+<p><b>The spring material.</b> The final spring is machined from POM-C, 0.7 mm thick, made with PBMC as partner. POM-C creeps less under constant load, takes repeated bending better and isn't attacked by oil, while polycarbonate tends to crack under stress in contact with many oils. A machined part is also uniform; a printed one has layer lines that act like notches.</p>
 <p><b>Tolerances from simulation.</b> I ran a parametric Ansys study of manufacturing defects to see how far they move the spring's response, and set two specs from it: 0.02 mm parallelism between the faces, measured with the spring held flat, and Ra 0.8 µm.</p>
 <p><b>The housing.</b> Machined aluminium throughout. The oil tank is machined from PMMA so the spring stays visible, and the seals are printed in TPU 60A.</p>
-<h3>What went wrong</h3>
-<p>The first prototype was an Arduino, a 3D-printed chassis and a laser-cut acrylic tank glued together. Oil crept along the Arduino's cables by capillary action. The final build has custom PCBs instead of loose wiring, a milled aluminium chassis and a milled PMMA tank.</p>
-<h3>Results</h3>
-<p>Shaken next to a commercial accelerometer, it tracks the reference with a 2 % RMS error, 5 % at worst, over a ±17 g range. The rocket peaks at about 15 g.</p>
 <h3>My part</h3>
 <p>I designed the mechanics and the mathematical model, laid out one of the three PCBs in KiCad, wrote the signal processing, ran the FEA and machined the parts. Julien Finkler designed the other two PCBs.</p>""",
     cs_proto=("cubesat-proto", "First prototype: Arduino, 3D-printed chassis and a glued acrylic tank on a red table.", "Prototype 1: Arduino, printed chassis, glued tank."),
@@ -153,9 +158,9 @@ T = {
              ("crossbow-lever", "The green printed cocking lever in use.", "The cocking lever.")),
 
     hk_h="GRAPPLING HOOK", hk_label="Grappling hook",
-    hk_ctx="Personal project. 6061 aluminium and a brass tip.",
+    hk_ctx='Personal project. 6061 aluminium and a brass tip. <a href="https://www.esilv.fr/un-grappin-articule-un-projet-dinnovation-technique-concu-a-lesilv/" hreflang="fr">Featured in an article on ESILV\'s website</a> (in French).',
     hk_body="""
-<p class="keep">Turned and milled, with arms that fold along the shaft.</p>
+<p class="keep">Turned and milled, with arms that fold along the shaft. The idea came from friends who wanted one for climbing.</p>
 <h3>Manual first, then CNC</h3>
 <p>I made the first version on manual machines. When I wanted more complex shapes, the workshop teacher told me to stop spending hours doing by hand what a CNC does better. So I redrew it for CNC and wrote the CAM myself: serrated arms, a knurled grip, and a brass tip, chosen for its looks and for the weight it puts at the bottom.</p>
 <p>CNC and manual lathe and mill. The arms come out of plate stock with adaptive toolpaths; the shaft is turned between centres.</p>""",
@@ -199,7 +204,7 @@ T = {
         ("Léofly, ESILV's experimental rocketry club", "2023 - TODAY", "Rockets and payloads for the C'Space (CNES) and EuRoC campaigns",
          ["2026 to today: design and manufacturing referent. Technical support to the teams; brought in on STAR-D.",
           "2024 to 2026: technical director, in charge of manufacturing. Led the teams on the Krypton rocket, ran the CAD, CAM and machine-tool training, machined aluminium structure rings, steel and PMMA parts, and laid up carbon structures.",
-          "2024 to 2026: designer of the CubeSat accelerometer.",
+          "2023 to 2026: designer of the CubeSat accelerometer.",
           "2023: team member on the Xénon rocket: CAD, CAM and FEA."],
          ()),
         ("Pôle Léonard de Vinci", "2023 - 2024", "Workshop and lab assistant, part-time",
@@ -233,7 +238,7 @@ T["fr"].update(
     jump='<a href="#card">Le programme qui a gravé votre carte</a>',
 
     cs_h="ACCÉLÉROMÈTRE|MAGNÉTIQUE", cs_label="Accéléromètre magnétique",
-    cs_ctx="Une expérience CubeSat 1U pour Léofly, mon association de fusées. De 2024 à 2026.",
+    cs_ctx="Une expérience CubeSat 1U pour Léofly, mon association de fusées. De 2023 à 2026.",
     cs_alt="Rendu en coupe de l'accéléromètre : un aimant sur un ressort plat dans un réservoir d'huile transparent, les PCB en dessous, un châssis en aluminium.",
     cs_call=("AIMANT", "RESSORT|POM-C 0,7", "RÉSERVOIR|PMMA"),
     cs_sum="Un aimant sur un ressort plat, amorti dans l'huile, lu par deux capteurs à effet Hall à 8 kHz. J'ai conçu la mécanique et le modèle qui transforme les deux signaux en accélération, puis j'ai usiné les pièces.",
@@ -244,18 +249,23 @@ T["fr"].update(
     spring_spec="Spécification du ressort : parallélisme 0,02 mm par rapport à la référence A, contrôlé maintenu à plat (ISO 10579-NR), rugosité Ra 0,8 µm.",
     spring_cap="Le ressort en POM-C sur le bloc où j'ai fait un essai d'usinage de son contour. Les 0,02 mm sont un parallélisme contrôlé ressort maintenu à plat : un disque plastique de 0,7 mm se voile dès qu'il est libre, et un contrôle à l'état libre rejetterait des pièces bonnes.",
     cs_body="""
-<h3>Le problème</h3>
-<p>Léofly voulait sa propre expérience dans un CubeSat 1U, un cube de 100 mm. Je voulais mesurer l'accélération avec un mécanisme que nous pouvions concevoir et fabriquer nous-mêmes, plutôt que de lire une puce achetée.</p>
+<h3>Le point de départ</h3>
+<p>En 2023, l'association voulait un accéléromètre laser. Je me suis renseigné sur leur fonctionnement, j'ai estimé que ce serait trop compliqué à fabriquer nous-mêmes, et j'ai proposé à la place un aimant sur un ressort, lu par un capteur à effet Hall. Je connaissais ces capteurs pour avoir réparé l'accélérateur de ma trottinette électrique.</p>
 <h3>Le principe</h3>
-<p>Un aimant est monté sur un ressort ortho-planaire : un disque plat découpé de fentes en spirale, dont le centre monte et descend sans tourner. Quand la fusée accélère, l'aimant se déplace. Deux capteurs à effet Hall, un de chaque côté, lisent la variation du champ, et un modèle MATLAB recalé sur des données d'étalonnage transforme les deux signaux en accélération. Le ressort baigne dans l'huile, pour que l'aimant s'arrête vite au lieu d'osciller après chaque choc.</p>
+<p>Un aimant est monté sur un ressort ortho-planaire : un disque plat découpé de fentes en spirale, dont le centre monte et descend sans tourner. Quand la fusée accélère, l'aimant se déplace. Deux capteurs à effet Hall, un de chaque côté, lisent la variation du champ, et un modèle transforme les deux signaux en accélération. Le ressort baigne dans l'huile, pour que l'aimant s'arrête vite au lieu d'osciller après chaque choc.</p>
+<h3>D'une lamelle de PLA au ressort ortho-planaire</h3>
+<p>Le premier ressort était une fine lamelle de PLA imprimée qui fléchissait sous l'aimant. Un autre étudiant m'a orienté vers les ressorts ortho-planaires, dont les bras en spirale gardent le centre dans l'axe. J'en ai imprimé un, puis le ressort final a été usiné en POM-C.</p>
+<h3>Lire le ressort à l'envers</h3>
+<p>Si le ressort reste immobile à un déplacement donné, l'accélération s'en déduit directement. Le mien rebondissait : la mesure à un instant dépend de l'inertie de l'aimant et de tout ce qui s'est passé juste avant. Je suivais alors le cours d'automatismes et asservissements, et les transformées de Laplace me semblaient sans rapport avec ce que je savais construire. Puis le déclic : c'est un asservissement à l'envers. Un PID pilote une entrée pour obtenir la sortie voulue ; ici, je ne vois que la sortie qui oscille et je dois remonter à l'entrée qui l'a causée. Le cours a pris son sens à partir de là.</p>
+<h3>Ce qui n'a pas marché</h3>
+<p>En pratique, l'inversion n'était pas propre. Il suffisait de tenir le prototype pour qu'il vibre et entre en résonance, et le signal était trop complexe pour être inversé de façon fiable. Si le passé pèse trop sur la mesure, il faut qu'il s'efface plus vite : amortir la masse. Le ressort était assez sensible pour en sacrifier un peu. Après quelques essais d'amortissement ratés, j'ai acheté une boîte en plastique et une bouteille d'huile végétale, et j'y ai plongé le ressort. On m'a pris pour un fou, jusqu'à ce que le signal, traité sous MATLAB et Simulink, ressemble à celui d'un capteur du commerce.</p>
+<p>L'huile a apporté son propre problème : elle remontait le long des câbles de l'Arduino par capillarité. La version finale remplace les fils volants par des PCB sur mesure, le châssis imprimé par un châssis en aluminium fraisé, et la boîte par un réservoir en PMMA usiné.</p>
+<h3>L'étalonnage</h3>
+<p>Les coefficients que j'avais tirés de mesures sur les pièces ne donnaient rien d'exploitable. Un outil d'identification de modèle, si : j'ai calé le modèle sur des enregistrements réels. Secoué à côté d'un accéléromètre du commerce, il suit maintenant la référence avec une erreur RMS de 2 %, 5 % au pire, sur une étendue de ±17 g. La fusée culmine vers 15 g.</p>
 <h3>Les choix</h3>
-<p><b>Le matériau du ressort.</b> Le premier ressort était imprimé en 3D en polycarbonate. Le ressort final est usiné en POM-C, épaisseur 0,7 mm, réalisé avec PBMC comme partenaire. Le POM-C flue moins sous charge constante, résiste mieux aux flexions répétées et ne craint pas l'huile, alors que le polycarbonate a tendance à fissurer sous contrainte au contact de nombreuses huiles. Une pièce usinée est aussi homogène, alors qu'une pièce imprimée a des couches qui jouent le rôle d'entailles.</p>
+<p><b>Le matériau du ressort.</b> Le ressort final est usiné en POM-C, épaisseur 0,7 mm, réalisé avec PBMC comme partenaire. Le POM-C flue moins sous charge constante, résiste mieux aux flexions répétées et ne craint pas l'huile, alors que le polycarbonate a tendance à fissurer sous contrainte au contact de nombreuses huiles. Une pièce usinée est aussi homogène, alors qu'une pièce imprimée a des couches qui jouent le rôle d'entailles.</p>
 <p><b>Des tolérances issues de la simulation.</b> J'ai mené une étude Ansys paramétrique des défauts de fabrication pour voir de combien ils décalent la réponse du ressort, et j'en ai tiré deux spécifications : un parallélisme de 0,02 mm entre les faces, mesuré ressort maintenu à plat, et un Ra de 0,8 µm.</p>
 <p><b>Le boîtier.</b> Entièrement en aluminium usiné. Le réservoir d'huile est usiné dans du PMMA pour garder le ressort visible, et les joints sont imprimés en TPU 60A.</p>
-<h3>Ce qui n'a pas marché</h3>
-<p>Le premier prototype, c'était un Arduino, un châssis imprimé en 3D et un réservoir en acrylique découpé au laser et collé. L'huile remontait le long des câbles de l'Arduino par capillarité. La version finale a des PCB sur mesure au lieu de fils volants, un châssis en aluminium fraisé et un réservoir en PMMA fraisé.</p>
-<h3>Résultats</h3>
-<p>Secoué à côté d'un accéléromètre du commerce, il suit la référence avec une erreur RMS de 2 %, 5 % au pire, sur une étendue de ±17 g. La fusée culmine vers 15 g.</p>
 <h3>Mon rôle</h3>
 <p>J'ai conçu la mécanique et le modèle mathématique, routé l'un des trois PCB sous KiCad, écrit le traitement du signal, fait les calculs par éléments finis et usiné les pièces. Julien Finkler a conçu les deux autres PCB.</p>""",
     cs_proto=("cubesat-proto", "Premier prototype : Arduino, châssis imprimé en 3D et réservoir acrylique collé, sur une table rouge.", "Prototype 1 : Arduino, châssis imprimé, réservoir collé."),
@@ -303,9 +313,9 @@ T["fr"].update(
              ("crossbow-lever", "Le levier d'armement vert imprimé, en cours d'utilisation.", "Le levier d'armement.")),
 
     hk_h="GRAPPIN EN ALUMINIUM", hk_label="Grappin en aluminium",
-    hk_ctx="Projet personnel. Aluminium 6061 et pointe en laiton.",
+    hk_ctx='Projet personnel. Aluminium 6061 et pointe en laiton. <a href="https://www.esilv.fr/un-grappin-articule-un-projet-dinnovation-technique-concu-a-lesilv/">Article sur le site de l\'ESILV</a>.',
     hk_body="""
-<p class="keep">Tourné et fraisé, avec des bras qui se replient le long du fût.</p>
+<p class="keep">Tourné et fraisé, avec des bras qui se replient le long du fût. L'idée est venue d'amis qui en voulaient un pour l'escalade.</p>
 <h3>D'abord en conventionnel, puis en CNC</h3>
 <p>J'ai fait la première version sur machines conventionnelles. Quand j'ai voulu des formes plus complexes, le professeur d'atelier m'a dit d'arrêter de passer des heures à faire à la main ce qu'une CNC fait mieux. Je l'ai donc redessiné pour la CNC et j'ai écrit la FAO moi-même : bras crantés, poignée moletée et pointe en laiton, choisie pour l'aspect et pour le poids qu'elle place en bas.</p>
 <p>Tour et fraiseuse, CNC et conventionnels. Les bras sortent d'une plaque en parcours adaptatifs ; le fût est tourné entre pointes.</p>""",
@@ -349,7 +359,7 @@ T["fr"].update(
         ("Léofly, l'association de fusées expérimentales de l'ESILV", "2023 - AUJOURD'HUI", "Fusées et charges utiles pour les campagnes C'Space (CNES) et EuRoC",
          ["Depuis 2026 : référent conception et fabrication. Appui technique aux équipes ; sollicité sur STAR-D.",
           "2024 à 2026 : directeur technique, responsable fabrication. Encadrement des équipes de la fusée Krypton, formations CAO, FAO et machines-outils, usinage des bagues de structure en aluminium, de pièces en acier et en PMMA, structures en carbone.",
-          "2024 à 2026 : concepteur de l'accéléromètre CubeSat.",
+          "2023 à 2026 : concepteur de l'accéléromètre CubeSat.",
           "2023 : membre de l'équipe de la fusée Xénon : CAO, FAO et calcul par éléments finis."],
          ()),
         ("Pôle Léonard de Vinci", "2023 - 2024", "Auxiliaire ateliers et laboratoires, temps partiel",
