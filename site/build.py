@@ -91,23 +91,23 @@ T = {
     tb_label="Key figures",
     spring_alt="White POM-C ortho-planar spring lying on an aluminium block that carries its test-cut outline.",
     spring_spec="Spring specification: parallelism 0.02 mm to datum A, inspected held flat (ISO 10579-NR), roughness Ra 0.8 µm.",
-    spring_cap="The POM-C spring on the block where I test-cut its outline. The 0.02 mm is a parallelism checked with the spring held flat: a 0.7 mm plastic disc warps as soon as it's free, so a free-state check would reject good parts.",
+    spring_cap="The POM-C spring on the block where I test-cut its outline. The 0.02 mm is a parallelism checked with the spring held flat: a 0.7 mm plastic disc warps as soon as you let go of it, so checking it free would reject good parts.",
     cs_body="""
 <h3>Where it started</h3>
-<p>In 2023 the club wanted a laser accelerometer. I read up on how they work, argued it would be too complicated to build ourselves, and proposed a magnet on a spring read by a Hall sensor instead. I knew Hall sensors from repairing the throttle of my electric scooter.</p>
+<p>In 2023 the club wanted to build a laser accelerometer. I read up on how they work and said it would be way too complicated for us, but that we could probably make one with a magnet, a spring and a Hall sensor. I knew Hall sensors because I'd just repaired the throttle on my electric scooter.</p>
 <h3>How it works</h3>
-<p>A magnet sits on an ortho-planar spring: a flat disc cut with spiral slots, so its centre moves straight up and down without turning. When the rocket accelerates, the magnet moves. Two Hall sensors, one on each side, read the change in field, and a model turns the two signals into an acceleration. The spring sits in an oil bath so the magnet stops quickly instead of ringing after every shock.</p>
+<p>A magnet sits on an ortho-planar spring: a flat disc cut with spiral slots, so its centre moves straight up and down without turning. When the rocket accelerates, the magnet moves. Two Hall sensors, one on each side, read the change in field, and a model turns the two signals into an acceleration. The spring sits in an oil bath so the magnet settles quickly instead of ringing after every shock.</p>
 <h3>From a strip of PLA to an ortho-planar spring</h3>
-<p>The first spring was a thin strip of printed PLA flexing under the magnet. Another student pointed me to ortho-planar springs, whose spiral legs keep the centre moving straight. I printed one, then the final spring was machined from POM-C.</p>
+<p>My first spring was just a thin strip of printed PLA bending under the magnet. Another student told me to look up ortho-planar springs, so I printed one. The final spring is machined from POM-C.</p>
 <h3>Reading the spring backwards</h3>
-<p>If the spring holds still at a given displacement, the acceleration follows directly. Mine bounced: the reading at any moment depends on the magnet's inertia and on everything that happened just before. At the time I was taking a control-systems class, and Laplace transforms felt unrelated to anything I could build. Then it clicked: this is a control loop run in reverse. A PID drives an input to get the output you want; here I only see the wobbly output and have to work back to the input that caused it. The class made sense after that.</p>
+<p>If the spring sits still at a given displacement, working out the acceleration is easy. Mine bounced around, so every reading depended on the magnet's inertia and on everything that had just happened before. At the same time I was taking a control-systems class, and honestly I couldn't connect Laplace transforms to anything I could actually build. Then it clicked: this was a control loop backwards. A PID drives an input to get the output you want; I only had the wobbly output and needed to work back to the input that caused it. Needless to say, I passed the class.</p>
 <h3>What went wrong</h3>
-<p>In practice the inversion wasn't clean. Just holding the prototype made it vibrate and resonate, and the signal was too intricate to invert reliably. If past motion weighs too much on the reading, the fix is to make it fade faster: damp the mass. The spring was sensitive enough to give some of that up. After a couple of damping attempts that didn't work, I bought a plastic food box and a bottle of vegetable oil and sank the spring in it. People thought I was mad, until the signal, processed in MATLAB and Simulink, started to look like a commercial sensor's.</p>
-<p>The oil brought its own problem: it crept along the Arduino's cables by capillary action. The final build replaces the loose wiring with custom PCBs, the printed chassis with a milled aluminium one, and the food box with a machined PMMA tank.</p>
+<p>In practice it wasn't clean. Just holding the prototype in my hand made it vibrate and resonate, and the signal was too messy to work back from. The more the old bounces leak into the reading, the worse it gets, so they had to die out faster: I needed to damp the mass. The spring was sensitive enough that I could afford to lose some of that. After a couple of damping attempts that didn't work, I bought a Tupperware and a bottle of vegetable oil and dropped the spring in. People thought I'd lost it, until the signal, cleaned up in MATLAB and Simulink, started looking like a commercial sensor's.</p>
+<p>Then the oil found a new way to cause trouble: it crept up the Arduino's wires by capillary action. In the final build the loose wires became custom PCBs, the printed chassis became milled aluminium, and the Tupperware became a machined PMMA tank.</p>
 <h3>Calibration</h3>
-<p>The coefficients I derived from measuring the parts gave nothing usable. A model-fitting tool did: I calibrated the model on real recordings instead. Shaken next to a commercial accelerometer, it now tracks the reference with a 2 % RMS error, 5 % at worst, over a ±17 g range. The rocket peaks at about 15 g.</p>
+<p>The coefficients I calculated from measuring the parts gave me nothing usable. So I fitted the model to real recordings instead, and that worked. Shaken next to a commercial accelerometer, it now follows it within 2 % RMS, 5 % at worst, over ±17 g. The rocket peaks at about 15 g.</p>
 <h3>Decisions</h3>
-<p><b>The spring material.</b> The final spring is machined from POM-C, 0.7 mm thick, made with PBMC as partner. POM-C creeps less under constant load, takes repeated bending better and isn't attacked by oil, while polycarbonate tends to crack under stress in contact with many oils. A machined part is also uniform; a printed one has layer lines that act like notches.</p>
+<p><b>The spring material.</b> The final spring is machined from POM-C, 0.7 mm thick, made with PBMC, one of the club's partners. POM-C creeps less under constant load, takes repeated bending better and isn't attacked by oil, while polycarbonate tends to crack under stress in contact with many oils. A machined part is also uniform; a printed one has layer lines that act like notches.</p>
 <p><b>Tolerances from simulation.</b> I ran a parametric Ansys study of manufacturing defects to see how far they move the spring's response, and set two specs from it: 0.02 mm parallelism between the faces, measured with the spring held flat, and Ra 0.8 µm.</p>
 <p><b>The housing.</b> Machined aluminium throughout. The oil tank is machined from PMMA so the spring stays visible, and the seals are printed in TPU 60A.</p>
 <h3>My part</h3>
@@ -124,15 +124,15 @@ T = {
 <h3>The experiment</h3>
 <p>STAR-D (Space Test of Amoeba Response: Dictyostelium) uses the amoeba <i>Dictyostelium discoideum</i> to study how reduced gravity affects the early stages of the immune response, and whether this organism could stand in for human immune cells in future space experiments. It runs as a fully autonomous lab aboard REXUS 38, from launch to recovery, with a launch planned for March 2027. The team comes from ESILV, AgroParisTech, Newcastle University and the University of Vienna.</p>
 <h3>What I did</h3>
-<p>I wasn't on the team: they brought me in for machining and design for manufacture.</p>
+<p>I wasn't on the team. They brought me in for the machining and to make their parts easier to manufacture.</p>
 <ul>
-<li>Machined the aluminium tank for the phase-change fluid, and printed its gaskets in TPU 60A, because no catalogue seal had the right shape.</li>
+<li>Machined the aluminium tank for the phase-change fluid, and printed its gaskets in TPU 60A, since nothing off the shelf had the right shape.</li>
 <li>Helped define the sealing tolerances and surface specifications.</li>
 <li>Reworked parts of the CAD for manufacture, to cut the cost of the parts outsourced to JLCCNC.</li>
 <li>Drew a large share of the connector box CAD and drawings.</li>
 <li>Adjusted the rails and other parts for an exact fit.</li>
 </ul>
-<p>The experiment and its science belong to the STAR-D team.</p>""",
+<p>It's their experiment; I helped build it.</p>""",
     sd_imgs=(("stard-tank", "Two machined aluminium tank halves with printed TPU gaskets and O-rings on a printer bed.", "Tank halves for the phase-change fluid, with their printed TPU gaskets."),
              ("stard-module", "The experiment module, a blue cylinder, with the connector box being fitted.", "The connector box going into the module.")),
 
@@ -145,14 +145,14 @@ T = {
     xb_body="""
 <p class="keep">32 CNC-machined aluminium parts, third iteration after a PETG prototype and a laminated carbon one.</p>
 <h3>Why reverse draw</h3>
-<p>In a reverse-draw crossbow the limbs point back towards the shooter, so the string travels further for the same width and the weight sits closer to the grip. It also makes the cams and the cocking mechanism harder to design, which is the part I wanted to work on.</p>
+<p>In a reverse-draw crossbow the limbs point back towards the shooter, so the string travels further for the same width and the weight sits closer to the grip. It also makes the cams and the cocking mechanism harder to design, which is exactly the part I wanted to work on.</p>
 <h3>Decisions</h3>
 <p><b>One model drives everything.</b> The SolidWorks assembly is driven by a shared equations file, so changing one dimension updates every part that depends on it.</p>
 <p><b>Check before cutting aluminium.</b> Each new geometry was tested in POM-C or 3D printed before I machined it. The limbs are glass fibre; I prototyped them in POM.</p>
-<p><b>A simulator for the cocking mechanism.</b> I built it with AI assistance: I change the shape and position of the parts live and the kinematics recompute instantly, so I can try ideas without going back to CAD.</p>
+<p><b>A simulator for the cocking mechanism.</b> I built it with help from AI: I can change the shape and position of the parts live and the kinematics update instantly, so I can try ideas without going back into CAD.</p>
 <p><b>Machining.</b> 32 parts in 6061, 7075 and 5052 aluminium, held by 120 fasteners. Adaptive toolpaths, multi-operation fixtures, minimum-quantity lubrication.</p>
 <h3>Status</h3>
-<p>Draw weight and bolt speed will come with testing.</p>""",
+<p>No numbers for draw weight or bolt speed yet. Those come with testing.</p>""",
     xb_more=(("crossbow-cam", "A machined aluminium cam with its bearing, held in the hand.", "A cam, straight off the machine."),
              ("crossbow-top", "The prototype seen from above on the bench.", "From above: the limbs point back."),
              ("crossbow-lever", "The green printed cocking lever in use.", "The cocking lever.")),
@@ -162,7 +162,7 @@ T = {
     hk_body="""
 <p class="keep">Turned and milled, with arms that fold along the shaft. The idea came from friends who wanted one for climbing.</p>
 <h3>Manual first, then CNC</h3>
-<p>I made the first version on manual machines. When I wanted more complex shapes, the workshop teacher told me to stop spending hours doing by hand what a CNC does better. So I redrew it for CNC and wrote the CAM myself: serrated arms, a knurled grip, and a brass tip, chosen for its looks and for the weight it puts at the bottom.</p>
+<p>I made the first version on manual machines. When I wanted more complex shapes, the workshop teacher told me to stop spending hours doing by hand what a CNC does better. So I redrew it for CNC and wrote the CAM myself: serrated arms, a knurled grip, and a brass tip, for the looks and for the weight at the bottom.</p>
 <p>CNC and manual lathe and mill. The arms come out of plate stock with adaptive toolpaths; the shaft is turned between centres.</p>""",
     hk_imgs=(("hook-deployed", "The aluminium grappling hook held up with its three arms open.", "Arms open."),
              ("hook-folded", "The hook with its arms folded along the shaft.", "Arms folded.")),
@@ -183,7 +183,7 @@ T = {
 
     cd_h="THE CARD YOU SCANNED", cd_label="The card you scanned",
     cd_ctx="Milled from aluminium plate on that same machine, raw finish. The disc in the middle is an ortho-planar spring, the same kind as in the accelerometer.",
-    cd_body="This is the engraving program I wrote for the card's back: <b>25,354 lines of G-code</b> and one 90° V-bit, replayed from the posted file. My phone number is left out.",
+    cd_body="This is the engraving program I wrote for the back of your card, replayed: <b>25,354 lines of G-code</b>, one 90° V-bit. I took my phone number out.",
     cd_replay="Replay",
 
     xp_h="EXPERIENCE",
@@ -220,7 +220,7 @@ T = {
 
     ct_h="CONTACT",
     ct="I'm looking for a permanent job (CDI) in manufacturing, industrialisation or methods engineering from September 2027, in the Paris area.",
-    colophon="Headings are drawn with the ISOCP strokes engraved on the card, extracted from its artwork. Text set in Atkinson Hyperlegible Next.",
+    colophon="The headings use the actual strokes engraved on the card, pulled out of its design files. Body text is Atkinson Hyperlegible Next.",
     nf_title="Page not found", nf="This page doesn't exist. The card's QR code leads to the home page.", nf_link="Go to the home page",
 ),
 }
@@ -247,23 +247,23 @@ T["fr"].update(
     tb_label="Chiffres clés",
     spring_alt="Ressort ortho-planaire blanc en POM-C posé sur un bloc d'aluminium qui porte l'essai d'usinage de son contour.",
     spring_spec="Spécification du ressort : parallélisme 0,02 mm par rapport à la référence A, contrôlé maintenu à plat (ISO 10579-NR), rugosité Ra 0,8 µm.",
-    spring_cap="Le ressort en POM-C sur le bloc où j'ai fait un essai d'usinage de son contour. Les 0,02 mm sont un parallélisme contrôlé ressort maintenu à plat : un disque plastique de 0,7 mm se voile dès qu'il est libre, et un contrôle à l'état libre rejetterait des pièces bonnes.",
+    spring_cap="Le ressort en POM-C sur le bloc où j'ai fait un essai d'usinage de son contour. Les 0,02 mm sont un parallélisme contrôlé ressort maintenu à plat : un disque plastique de 0,7 mm se voile dès qu'on le lâche, donc le contrôler libre ferait rejeter des pièces bonnes.",
     cs_body="""
 <h3>Le point de départ</h3>
-<p>En 2023, l'association voulait un accéléromètre laser. Je me suis renseigné sur leur fonctionnement, j'ai estimé que ce serait trop compliqué à fabriquer nous-mêmes, et j'ai proposé à la place un aimant sur un ressort, lu par un capteur à effet Hall. Je connaissais ces capteurs pour avoir réparé l'accélérateur de ma trottinette électrique.</p>
+<p>En 2023, l'association voulait faire un accéléromètre laser. Je me suis renseigné sur leur fonctionnement et j'ai dit que ce serait beaucoup trop compliqué pour nous, mais qu'on pouvait sûrement en faire un avec un aimant, un ressort et un capteur à effet Hall. Je connaissais ces capteurs parce que je venais de réparer l'accélérateur de ma trottinette électrique.</p>
 <h3>Le principe</h3>
-<p>Un aimant est monté sur un ressort ortho-planaire : un disque plat découpé de fentes en spirale, dont le centre monte et descend sans tourner. Quand la fusée accélère, l'aimant se déplace. Deux capteurs à effet Hall, un de chaque côté, lisent la variation du champ, et un modèle transforme les deux signaux en accélération. Le ressort baigne dans l'huile, pour que l'aimant s'arrête vite au lieu d'osciller après chaque choc.</p>
+<p>Un aimant est monté sur un ressort ortho-planaire : un disque plat découpé de fentes en spirale, dont le centre monte et descend sans tourner. Quand la fusée accélère, l'aimant se déplace. Deux capteurs à effet Hall, un de chaque côté, lisent la variation du champ, et un modèle transforme les deux signaux en accélération. Le ressort baigne dans l'huile, pour que l'aimant se stabilise vite au lieu de vibrer après chaque choc.</p>
 <h3>D'une lamelle de PLA au ressort ortho-planaire</h3>
-<p>Le premier ressort était une fine lamelle de PLA imprimée qui fléchissait sous l'aimant. Un autre étudiant m'a orienté vers les ressorts ortho-planaires, dont les bras en spirale gardent le centre dans l'axe. J'en ai imprimé un, puis le ressort final a été usiné en POM-C.</p>
+<p>Mon premier ressort, c'était juste une fine lamelle de PLA imprimée qui pliait sous l'aimant. Un autre étudiant m'a conseillé de regarder les ressorts ortho-planaires, alors j'en ai imprimé un. Le ressort final est usiné en POM-C.</p>
 <h3>Lire le ressort à l'envers</h3>
-<p>Si le ressort reste immobile à un déplacement donné, l'accélération s'en déduit directement. Le mien rebondissait : la mesure à un instant dépend de l'inertie de l'aimant et de tout ce qui s'est passé juste avant. Je suivais alors le cours d'automatismes et asservissements, et les transformées de Laplace me semblaient sans rapport avec ce que je savais construire. Puis le déclic : c'est un asservissement à l'envers. Un PID pilote une entrée pour obtenir la sortie voulue ; ici, je ne vois que la sortie qui oscille et je dois remonter à l'entrée qui l'a causée. Le cours a pris son sens à partir de là.</p>
+<p>Si le ressort reste immobile à un déplacement donné, l'accélération se calcule facilement. Le mien rebondissait dans tous les sens : chaque mesure dépendait de l'inertie de l'aimant et de tout ce qui venait de se passer. En même temps, je suivais le cours d'automatismes et asservissements, et honnêtement je ne voyais pas le lien entre les transformées de Laplace et quoi que ce soit de concret. Puis le déclic : c'était un asservissement à l'envers. Un PID pilote une entrée pour obtenir la sortie voulue ; moi, je n'avais que la sortie qui oscille et je devais remonter à l'entrée qui l'avait causée. Inutile de dire que j'ai validé le cours.</p>
 <h3>Ce qui n'a pas marché</h3>
-<p>En pratique, l'inversion n'était pas propre. Il suffisait de tenir le prototype pour qu'il vibre et entre en résonance, et le signal était trop complexe pour être inversé de façon fiable. Si le passé pèse trop sur la mesure, il faut qu'il s'efface plus vite : amortir la masse. Le ressort était assez sensible pour en sacrifier un peu. Après quelques essais d'amortissement ratés, j'ai acheté une boîte en plastique et une bouteille d'huile végétale, et j'y ai plongé le ressort. On m'a pris pour un fou, jusqu'à ce que le signal, traité sous MATLAB et Simulink, ressemble à celui d'un capteur du commerce.</p>
-<p>L'huile a apporté son propre problème : elle remontait le long des câbles de l'Arduino par capillarité. La version finale remplace les fils volants par des PCB sur mesure, le châssis imprimé par un châssis en aluminium fraisé, et la boîte par un réservoir en PMMA usiné.</p>
+<p>En pratique, ce n'était pas propre. Rien qu'en tenant le prototype dans la main, il vibrait et entrait en résonance, et le signal était trop chaotique pour remonter à l'accélération. Plus les anciens rebonds se mélangent à la mesure, pire c'est, donc il fallait qu'ils s'éteignent plus vite : amortir la masse. Le ressort était assez sensible pour que je puisse en perdre un peu. Après quelques essais d'amortissement ratés, j'ai acheté un Tupperware et une bouteille d'huile végétale, et j'ai plongé le ressort dedans. Tout le monde m'a pris pour un fou, jusqu'à ce que le signal, nettoyé sous MATLAB et Simulink, ressemble à celui d'un capteur du commerce.</p>
+<p>Ensuite, l'huile a trouvé un autre moyen de poser problème : elle remontait le long des fils de l'Arduino par capillarité. Dans la version finale, les fils volants sont devenus des PCB sur mesure, le châssis imprimé un châssis en aluminium fraisé, et le Tupperware un réservoir en PMMA usiné.</p>
 <h3>L'étalonnage</h3>
-<p>Les coefficients que j'avais tirés de mesures sur les pièces ne donnaient rien d'exploitable. Un outil d'identification de modèle, si : j'ai calé le modèle sur des enregistrements réels. Secoué à côté d'un accéléromètre du commerce, il suit maintenant la référence avec une erreur RMS de 2 %, 5 % au pire, sur une étendue de ±17 g. La fusée culmine vers 15 g.</p>
+<p>Les coefficients que j'avais calculés à partir des mesures des pièces ne donnaient rien d'exploitable. J'ai donc calé le modèle directement sur des enregistrements réels, et là, ça a marché. Secoué à côté d'un accéléromètre du commerce, il le suit à 2 % RMS près, 5 % au pire, sur ±17 g. La fusée monte à environ 15 g.</p>
 <h3>Les choix</h3>
-<p><b>Le matériau du ressort.</b> Le ressort final est usiné en POM-C, épaisseur 0,7 mm, réalisé avec PBMC comme partenaire. Le POM-C flue moins sous charge constante, résiste mieux aux flexions répétées et ne craint pas l'huile, alors que le polycarbonate a tendance à fissurer sous contrainte au contact de nombreuses huiles. Une pièce usinée est aussi homogène, alors qu'une pièce imprimée a des couches qui jouent le rôle d'entailles.</p>
+<p><b>Le matériau du ressort.</b> Le ressort final est usiné en POM-C, épaisseur 0,7 mm, réalisé avec PBMC, l'un des partenaires de l'association. Le POM-C flue moins sous charge constante, résiste mieux aux flexions répétées et ne craint pas l'huile, alors que le polycarbonate a tendance à fissurer sous contrainte au contact de nombreuses huiles. Une pièce usinée est aussi homogène, alors qu'une pièce imprimée a des couches qui jouent le rôle d'entailles.</p>
 <p><b>Des tolérances issues de la simulation.</b> J'ai mené une étude Ansys paramétrique des défauts de fabrication pour voir de combien ils décalent la réponse du ressort, et j'en ai tiré deux spécifications : un parallélisme de 0,02 mm entre les faces, mesuré ressort maintenu à plat, et un Ra de 0,8 µm.</p>
 <p><b>Le boîtier.</b> Entièrement en aluminium usiné. Le réservoir d'huile est usiné dans du PMMA pour garder le ressort visible, et les joints sont imprimés en TPU 60A.</p>
 <h3>Mon rôle</h3>
@@ -279,15 +279,15 @@ T["fr"].update(
 <h3>L'expérience</h3>
 <p>STAR-D (Space Test of Amoeba Response: Dictyostelium) utilise l'amibe <i>Dictyostelium discoideum</i> pour étudier l'effet de la gravité réduite sur les premières étapes de la réponse immunitaire, et pour savoir si cet organisme pourrait remplacer les cellules immunitaires humaines dans de futures expériences spatiales. C'est un laboratoire entièrement autonome à bord de REXUS 38, du lancement à la récupération, avec un lancement prévu en mars 2027. L'équipe réunit l'ESILV, AgroParisTech, l'université de Newcastle et l'université de Vienne.</p>
 <h3>Ce que j'ai fait</h3>
-<p>Je ne faisais pas partie de l'équipe : elle m'a sollicité pour l'usinage et la conception pour la fabrication.</p>
+<p>Je ne faisais pas partie de l'équipe. Ils sont venus me chercher pour l'usinage et pour rendre leurs pièces plus faciles à fabriquer.</p>
 <ul>
-<li>Usiné le réservoir en aluminium du fluide à changement de phase, et imprimé ses joints en TPU 60A, faute de joint catalogue à la bonne forme.</li>
+<li>Usiné le réservoir en aluminium du fluide à changement de phase, et imprimé ses joints en TPU 60A, faute de joint du commerce à la bonne forme.</li>
 <li>Participé à la définition des tolérances d'étanchéité et des états de surface.</li>
 <li>Repris une partie de la CAO pour la fabrication, afin de réduire le coût des pièces sous-traitées chez JLCCNC.</li>
 <li>Réalisé une grande partie de la CAO et des plans du boîtier de connecteurs.</li>
 <li>Ajusté les rails et d'autres pièces pour un montage exact.</li>
 </ul>
-<p>L'expérience et sa science appartiennent à l'équipe STAR-D.</p>""",
+<p>C'est leur expérience ; j'ai aidé à la construire.</p>""",
     sd_imgs=(("stard-tank", "Deux demi-réservoirs en aluminium usinés, avec joints TPU imprimés et joints toriques, sur un plateau d'imprimante.", "Les demi-réservoirs du fluide à changement de phase et leurs joints TPU imprimés."),
              ("stard-module", "Le module de l'expérience, un cylindre bleu, pendant le montage du boîtier de connecteurs.", "Le boîtier de connecteurs entre dans le module.")),
 
@@ -304,10 +304,10 @@ T["fr"].update(
 <h3>Les choix</h3>
 <p><b>Un seul modèle pilote tout.</b> L'assemblage SolidWorks est piloté par un fichier d'équations partagé : changer une cote met à jour toutes les pièces qui en dépendent.</p>
 <p><b>Vérifier avant d'usiner l'aluminium.</b> Chaque nouvelle géométrie a été testée en POM-C ou imprimée en 3D avant l'usinage. Les branches sont en fibre de verre, prototypées en POM.</p>
-<p><b>Un simulateur du mécanisme d'armement.</b> Je l'ai développé avec l'aide de l'IA : je modifie en direct la forme et la position des pièces, la cinématique se recalcule instantanément, et je teste des idées sans repasser par la CAO.</p>
+<p><b>Un simulateur du mécanisme d'armement.</b> Je l'ai développé avec l'aide de l'IA : je modifie en direct la forme et la position des pièces, la cinématique se met à jour instantanément, et je teste des idées sans retourner dans la CAO.</p>
 <p><b>L'usinage.</b> 32 pièces en aluminium 6061, 7075 et 5052, assemblées par 120 éléments de visserie. Parcours adaptatifs, montages multi-opérations, lubrification MQL.</p>
 <h3>Où en est-elle</h3>
-<p>Puissance et vitesse des traits viendront avec les essais.</p>""",
+<p>Pas encore de chiffres de puissance ni de vitesse : ça viendra avec les essais.</p>""",
     xb_more=(("crossbow-cam", "Une came en aluminium usinée, avec son roulement, tenue dans la main.", "Une came, à la sortie de la machine."),
              ("crossbow-top", "Le prototype vu de dessus sur l'établi.", "Vue de dessus : les branches pointent vers l'arrière."),
              ("crossbow-lever", "Le levier d'armement vert imprimé, en cours d'utilisation.", "Le levier d'armement.")),
@@ -317,7 +317,7 @@ T["fr"].update(
     hk_body="""
 <p class="keep">Tourné et fraisé, avec des bras qui se replient le long du fût. L'idée est venue d'amis qui en voulaient un pour l'escalade.</p>
 <h3>D'abord en conventionnel, puis en CNC</h3>
-<p>J'ai fait la première version sur machines conventionnelles. Quand j'ai voulu des formes plus complexes, le professeur d'atelier m'a dit d'arrêter de passer des heures à faire à la main ce qu'une CNC fait mieux. Je l'ai donc redessiné pour la CNC et j'ai écrit la FAO moi-même : bras crantés, poignée moletée et pointe en laiton, choisie pour l'aspect et pour le poids qu'elle place en bas.</p>
+<p>J'ai fait la première version sur machines conventionnelles. Quand j'ai voulu des formes plus complexes, le professeur d'atelier m'a dit d'arrêter de passer des heures à faire à la main ce qu'une CNC fait mieux. Je l'ai donc redessiné pour la CNC et j'ai écrit la FAO moi-même : bras crantés, poignée moletée et pointe en laiton, pour le look et pour le poids en bas.</p>
 <p>Tour et fraiseuse, CNC et conventionnels. Les bras sortent d'une plaque en parcours adaptatifs ; le fût est tourné entre pointes.</p>""",
     hk_imgs=(("hook-deployed", "Le grappin en aluminium tenu à la main, trois bras ouverts.", "Bras ouverts."),
              ("hook-folded", "Le grappin, bras repliés le long du fût.", "Bras repliés.")),
@@ -338,7 +338,7 @@ T["fr"].update(
 
     cd_h="LA CARTE QUE VOUS|AVEZ SCANNÉE", cd_label="La carte que vous avez scannée",
     cd_ctx="Usinée dans une plaque d'aluminium sur cette même machine, finition brute. Le disque au centre est un ressort ortho-planaire, de la même famille que celui de l'accéléromètre.",
-    cd_body="Voici le programme de gravure que j'ai écrit pour le verso de la carte : <b>25 354 lignes de G-code</b> et un seul outil à graver à 90°, rejoués depuis le fichier publié. Mon numéro de téléphone n'y figure pas.",
+    cd_body="Voici le programme de gravure que j'ai écrit pour le verso de votre carte, rejoué : <b>25 354 lignes de G-code</b>, un seul outil à graver à 90°. J'ai retiré mon numéro de téléphone.",
     cd_replay="Rejouer",
 
     xp_h="EXPÉRIENCE",
@@ -375,7 +375,7 @@ T["fr"].update(
 
     ct_h="CONTACT",
     ct="Je cherche un CDI d'ingénieur fabrication, industrialisation ou méthodes à partir de septembre 2027, en Île-de-France.",
-    colophon="Les titres sont tracés avec les traits ISOCP gravés sur la carte, extraits de ses fichiers. Texte composé en Atkinson Hyperlegible Next.",
+    colophon="Les titres utilisent les vrais traits gravés sur la carte, extraits de ses fichiers de conception. Le texte est en Atkinson Hyperlegible Next.",
     nf_title="Page introuvable", nf="Cette page n'existe pas. Le QR code de la carte mène à la page d'accueil.", nf_link="Aller à l'accueil",
 )
 
