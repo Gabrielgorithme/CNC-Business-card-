@@ -153,7 +153,7 @@ T = {
     xb_body="""
 <p class="keep">32 CNC-machined aluminium parts, third iteration after a PETG prototype and a laminated carbon one.</p>
 <h3>Why reverse draw</h3>
-<p>In a reverse-draw crossbow the limbs point back towards the shooter, so the string travels further for the same width and the weight sits closer to the grip. It also makes the cams and the cocking mechanism harder to design, which is the part I wanted to work on.</p>
+<p>In a reverse-draw crossbow the limbs point back towards the shooter. The main reason: the limbs' inertia cancels out, so there's less recoil and the shot is more efficient. The string also travels further for the same width, and the weight sits closer to the grip. The trade-off is that the cams and the cocking mechanism get harder to design, which is the part I wanted to work on.</p>
 <h3>Decisions</h3>
 <p><b>One model drives everything.</b> The SolidWorks assembly is driven by a shared equations file, so changing one dimension updates every part that depends on it.</p>
 <p><b>Check before cutting aluminium.</b> Each new geometry was tested in POM-C or 3D printed before I machined it. The limbs are glass fibre; I prototyped them in POM.</p>
@@ -309,7 +309,7 @@ T["fr"].update(
     xb_body="""
 <p class="keep">32 pièces en aluminium usinées sur CNC, troisième itération après un prototype en PETG et un autre en carbone stratifié.</p>
 <h3>Pourquoi l'armement inversé</h3>
-<p>Sur une arbalète à armement inversé, les branches pointent vers le tireur : la corde parcourt une plus grande course pour la même largeur, et la masse se rapproche de la poignée. Les cames et le mécanisme d'armement deviennent plus difficiles à concevoir, et c'est justement ce qui m'intéressait.</p>
+<p>Sur une arbalète à armement inversé, les branches pointent vers le tireur. La raison principale : l'inertie des branches s'annule, donc moins de recul et un tir plus efficace. La corde parcourt aussi une plus grande course pour la même largeur, et la masse se rapproche de la poignée. En contrepartie, les cames et le mécanisme d'armement sont plus difficiles à concevoir, et c'est justement ce qui m'intéressait.</p>
 <h3>Les choix</h3>
 <p><b>Un seul modèle pilote tout.</b> L'assemblage SolidWorks est piloté par un fichier d'équations partagé : changer une cote met à jour toutes les pièces qui en dépendent.</p>
 <p><b>Vérifier avant d'usiner l'aluminium.</b> Chaque nouvelle géométrie a été testée en POM-C ou imprimée en 3D avant l'usinage. Les branches sont en fibre de verre, prototypées en POM.</p>
