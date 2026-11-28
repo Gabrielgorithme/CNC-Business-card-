@@ -206,6 +206,22 @@
    709
   ]
  },
+ "leofly-teach-lathe": {
+  "w": 960,
+  "h": 1280,
+  "widths": [
+   480,
+   960
+  ]
+ },
+ "leofly-teach-group": {
+  "w": 1280,
+  "h": 960,
+  "widths": [
+   640,
+   1280
+  ]
+ },
  "ambiance-showcase": {
   "w": 960,
   "h": 1005,
